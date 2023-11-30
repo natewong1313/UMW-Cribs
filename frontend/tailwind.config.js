@@ -9,6 +9,9 @@ export default {
       fontFamily: {
         sans: ["Manrope Variable", ...defaultTheme.fontFamily.sans],
       },
+      animation: {
+        "button-loader": "spin 1.8s linear infinite",
+      },
     },
   },
   plugins: [formPlugin, animatePlugin],

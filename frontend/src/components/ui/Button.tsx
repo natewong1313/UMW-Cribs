@@ -1,8 +1,9 @@
 import { cva, type VariantProps } from "class-variance-authority"
 import cnMerge from "@/utils/cnMerge"
+import { IconLoader as IconLoader } from "@tabler/icons-react"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-md font-medium ring-offset-background transition-colors duration-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center whitespace-nowrap rounded-md font-medium ring-offset-background transition-colors duration-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:select-none disabled:pointer-events-none disabled:opacity-70",
   {
     variants: {
       variant: {
@@ -30,20 +31,31 @@ const buttonVariants = cva(
 
 interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {}
+    VariantProps<typeof buttonVariants> {
+  isLoading?: boolean
+  loadingText?: string
+}
 export default function Button({
   className,
   variant,
   size,
   children,
+  isLoading,
+  loadingText,
+  disabled,
   ...props
 }: ButtonProps) {
+  if (isLoading) disabled = true
   return (
     <button
+      disabled={disabled}
       className={cnMerge(buttonVariants({ variant, size, className }))}
       {...props}
     >
-      {children}
+      {isLoading && (
+        <IconLoader className="animate-button-loader h-5 w-5 mr-1.5" />
+      )}
+      {loadingText || children}
     </button>
   )
 }
