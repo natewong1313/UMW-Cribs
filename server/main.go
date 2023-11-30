@@ -23,5 +23,9 @@ func main() {
 
 	routes.Setup(app)
 
-	app.Listen(":8080")
+	if os.Getenv("APP_ENV") == "production" && os.Getenv("PORT") != "" {
+		app.Listen(":" + os.Getenv("PORT"))
+	} else {
+		app.Listen(":8080")
+	}
 }
