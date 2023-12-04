@@ -1,7 +1,7 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "This is a sample swagger for Fiber",
+        "description": "This is a sample api",
         "title": "Web App Template API",
         "termsOfService": "http://swagger.io/terms/",
         "contact": {
@@ -16,5 +16,78 @@
     },
     "host": "localhost:3000",
     "basePath": "/",
-    "paths": {}
+    "paths": {
+        "/api/dogs": {
+            "get": {
+                "description": "get all dogs in database",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get all dogs",
+                "operationId": "get-dogs",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/DogsResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "Dog": {
+            "type": "object",
+            "required": [
+                "age",
+                "breed",
+                "color",
+                "image_url",
+                "name",
+                "traits",
+                "weight"
+            ],
+            "properties": {
+                "age": {
+                    "type": "integer"
+                },
+                "breed": {
+                    "type": "string"
+                },
+                "color": {
+                    "type": "string"
+                },
+                "image_url": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "traits": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "weight": {
+                    "type": "integer"
+                }
+            }
+        },
+        "DogsResponse": {
+            "type": "object",
+            "required": [
+                "dogs"
+            ],
+            "properties": {
+                "dogs": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Dog"
+                    }
+                }
+            }
+        }
+    }
 }

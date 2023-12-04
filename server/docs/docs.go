@@ -22,7 +22,80 @@ const docTemplate = `{
     },
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
-    "paths": {}
+    "paths": {
+        "/api/dogs": {
+            "get": {
+                "description": "get all dogs in database",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get all dogs",
+                "operationId": "get-dogs",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/DogsResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "Dog": {
+            "type": "object",
+            "required": [
+                "age",
+                "breed",
+                "color",
+                "image_url",
+                "name",
+                "traits",
+                "weight"
+            ],
+            "properties": {
+                "age": {
+                    "type": "integer"
+                },
+                "breed": {
+                    "type": "string"
+                },
+                "color": {
+                    "type": "string"
+                },
+                "image_url": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "traits": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "weight": {
+                    "type": "integer"
+                }
+            }
+        },
+        "DogsResponse": {
+            "type": "object",
+            "required": [
+                "dogs"
+            ],
+            "properties": {
+                "dogs": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Dog"
+                    }
+                }
+            }
+        }
+    }
 }`
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
@@ -32,7 +105,7 @@ var SwaggerInfo = &swag.Spec{
 	BasePath:         "/",
 	Schemes:          []string{},
 	Title:            "Web App Template API",
-	Description:      "This is a sample swagger for Fiber",
+	Description:      "This is a sample api",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

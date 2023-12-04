@@ -1,8 +1,10 @@
 package routes
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"github.com/gofiber/fiber/v2"
+)
 
-type Dog struct {
+type dog struct {
 	Name     string   `json:"name"`
 	Breed    string   `json:"breed"`
 	Color    string   `json:"color"`
@@ -10,13 +12,26 @@ type Dog struct {
 	Weight   int      `json:"weight"`
 	Traits   []string `json:"traits"`
 	ImageURL string   `json:"image_url"`
-}
+} //@name Dog
 
 func setupDogsRoutes(r fiber.Router) {
 	r.Get("/", getDogs)
 }
+
+type dogsResponse struct {
+	Dogs []dog `json:"dogs"`
+} //@name DogsResponse
+
+// GetDogs
+//
+//	@Summary		Get all dogs
+//	@Description	get all dogs in database
+//	@ID				get-dogs
+//	@Produce		json
+//	@Success		200		{object}	dogsResponse
+//	@Router			/api/dogs [get]
 func getDogs(c *fiber.Ctx) error {
-	dogs := []Dog{
+	dogs := []dog{
 		{
 			Name:     "Arthur",
 			Breed:    "Labrador Retriever",
@@ -33,7 +48,7 @@ func getDogs(c *fiber.Ctx) error {
 			Age:      4,
 			Weight:   85,
 			Traits:   []string{"Loyal", "Courageous", "Alert"},
-			ImageURL: "https://example.com/german_shepherd.jpg",
+			ImageURL: "https://cdn.britannica.com/79/232779-004-9EBC7CB8/German-Shepherd-dog-Alsatian.jpg",
 		},
 		{
 			Name:     "Daisy",
@@ -42,7 +57,7 @@ func getDogs(c *fiber.Ctx) error {
 			Age:      2,
 			Weight:   45,
 			Traits:   []string{"Smart", "Hypoallergenic", "Playful"},
-			ImageURL: "https://example.com/poodle.jpg",
+			ImageURL: "https://www.thesprucepets.com/thmb/8SWEbYRpIyavyuTBH1DjF8GIAXs=/4368x0/filters:no_upscale():strip_icc()/white-poodle-playing-in-the-yard--182178740-59af2b3fc4124400107c9da3.jpg",
 		},
 		{
 			Name:     "Hugo",
@@ -51,7 +66,7 @@ func getDogs(c *fiber.Ctx) error {
 			Age:      5,
 			Weight:   60,
 			Traits:   []string{"Adventurous", "Independent", "Friendly"},
-			ImageURL: "https://example.com/husky.jpg",
+			ImageURL: "https://cdn.britannica.com/84/232784-050-1769B477/Siberian-Husky-dog.jpg",
 		},
 		{
 			Name:     "Ervin",
@@ -60,7 +75,7 @@ func getDogs(c *fiber.Ctx) error {
 			Age:      6,
 			Weight:   12,
 			Traits:   []string{"Curious", "Lively", "Stubborn"},
-			ImageURL: "https://example.com/dachshund.jpg",
+			ImageURL: "https://dogtime.com/wp-content/uploads/sites/12/2011/01/GettyImages-700141990-e1688418771301.jpg?w=1024",
 		},
 		// Add more dogs here...
 	}
