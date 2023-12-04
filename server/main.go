@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/template/html/v2"
 	"github.com/natewong1313/web-app-template/server/routes"
 )
@@ -20,6 +21,7 @@ func main() {
 		config.Views = html.New("./dist", ".html")
 	}
 	app := fiber.New(config)
+	app.Use(logger.New())
 
 	routes.Setup(app)
 

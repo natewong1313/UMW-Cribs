@@ -2,8 +2,9 @@ FROM node:18-alpine3.17 as build-frontend
 ADD ./frontend ./build
 WORKDIR /build
 
-RUN npm install
-RUN npm run build
+RUN npm install -g pnpm
+RUN pnpm install
+RUN pnpm run build
 
 FROM golang:1.20 as build-server
 
