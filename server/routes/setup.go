@@ -11,6 +11,7 @@ func Setup(app *fiber.App) {
 	parentGroup.Get("/test", func(c *fiber.Ctx) error {
 		return c.SendString(os.Getenv("APP_ENV"))
 	})
+	setupDogsRoutes(parentGroup.Group("/dogs"))
 
 	if os.Getenv("APP_ENV") == "production" {
 		app.Static("/", "./dist")
