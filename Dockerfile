@@ -3,7 +3,6 @@ ADD ./frontend ./build
 WORKDIR /build
 
 RUN npm install
-RUN npm cache clean
 RUN npm run build
 
 FROM golang:1.20 as build-server
