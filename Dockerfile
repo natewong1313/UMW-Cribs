@@ -1,16 +1,10 @@
-FROM node:20-slim as build-frontend
-ENV PNPM_HOME="/pnpm"
-ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable
+FROM node:18-alpine3.17 as build-frontend
 ADD ./frontend ./build
 WORKDIR /build
 
-FROM build-frontend AS prod-deps
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile
-
-FROM build-frontend AS build
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
-RUN pnpm run build
+RUN npm install
+RUN npm cache clean
+RUN npm run build
 
 FROM golang:1.20 as build-server
 
