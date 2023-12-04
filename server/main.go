@@ -26,6 +26,6 @@ func main() {
 	if os.Getenv("APP_ENV") == "production" && os.Getenv("PORT") != "" {
 		app.Listen(":" + os.Getenv("PORT"))
 	} else {
-		app.Listen(":8080")
+		app.Listen(":3000")
 	}
 }
