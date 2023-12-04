@@ -1,7 +1,7 @@
 import { useQuery } from "react-query"
-import { DogsResponse } from "./types/types"
-import { getDogsQuery } from "./query"
 import { Link } from "react-router-dom"
+import { getDogsQuery } from "./query"
+import { DogsResponse } from "./types/types"
 
 export default function App() {
   const { isLoading, isError, data } = useQuery<DogsResponse>(getDogsQuery)
@@ -14,28 +14,28 @@ export default function App() {
       <div className="mt-4 flex space-x-2">
         {isLoading
           ? [...Array(5).keys()].map((i) => (
-              <div className="w-72 ring-1 ring-gray-300 rounded-md p-4" key={i}>
-                <div className="rounded-md w-full h-48 bg-gray-200 animate-pulse" />
-                <div className="mt-2 w-full bg-gray-200 h-4 rounded-full animate-pulse" />
-                <div className="mt-2.5 w-full bg-gray-200 h-6 rounded-full animate-pulse" />
+              <div className="w-72 rounded-md p-4 ring-1 ring-gray-300" key={i}>
+                <div className="h-48 w-full animate-pulse rounded-md bg-gray-200" />
+                <div className="mt-2 h-4 w-full animate-pulse rounded-full bg-gray-200" />
+                <div className="mt-2.5 h-6 w-full animate-pulse rounded-full bg-gray-200" />
               </div>
             ))
           : !isError &&
             data?.dogs.map((dog) => (
               <div
-                className="w-72 ring-1 ring-gray-300 rounded-md p-4"
+                className="w-72 rounded-md p-4 ring-1 ring-gray-300"
                 key={dog.name}
               >
                 <img
                   src={dog.image_url}
-                  className="rounded-md w-full h-48 bg-gray-200"
+                  className="h-48 w-full rounded-md bg-gray-200"
                   loading="eager"
                 />
-                <h1 className="font-semibold mt-1">{dog.name}</h1>
-                <div className="space-x-2 mt-1">
+                <h1 className="mt-1 font-semibold">{dog.name}</h1>
+                <div className="mt-1 space-x-2">
                   {dog.traits.map((trait: string) => (
                     <span
-                      className="py-1 px-2 bg-blue-100 rounded-full text-xs text-blue-500"
+                      className="rounded-full bg-blue-100 px-2 py-1 text-xs text-blue-500"
                       key={trait}
                     >
                       {trait}

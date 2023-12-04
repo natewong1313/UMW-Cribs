@@ -4,6 +4,11 @@ const config = {
   tabWidth: 2,
   semi: false,
   singleQuote: false,
+  importOrder: ["^@ui/(.*)$", "^[./]"],
+  plugins: [
+    "@trivago/prettier-plugin-sort-imports",
+    "prettier-plugin-tailwindcss",
+  ],
 }
 
 module.exports = config
