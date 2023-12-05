@@ -1,8 +1,6 @@
 module github.com/natewong1313/web-app-template/server
 
-go 1.21
-
-toolchain go1.21.1
+go 1.20
 
 require (
 	github.com/gofiber/fiber/v2 v2.51.0

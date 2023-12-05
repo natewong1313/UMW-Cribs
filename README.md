@@ -29,7 +29,7 @@ And the backend
 
 ```console
 $ cd server
-$ go mod tidy
+$ go mod download
 $ cd ../
 ```
 
