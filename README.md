@@ -6,7 +6,7 @@ This is my go-to project template for builing a web app. It features
 - Go backend (fiber) with hot-reloading using [Air](https://github.com/cosmtrek/air)
 - Typesafe communication between the frontend and backend using [Swagger](https://github.com/gofiber/swagger), [swagger-typescript-api](https://www.npmjs.com/package/swagger-typescript-api) and [Tanstack query](https://tanstack.com/query/latest)
 - Frontend proxies requests to the backend to avoid CORS errors in dev
-- Included Dockerfile to easily deploy
+- Included Dockerfile to easily deploy, which bundles the frontend and the backend onto one server
 
 ## Getting Started
 
