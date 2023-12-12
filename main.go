@@ -1,0 +1,53 @@
+package main
+
+import (
+	"os"
+
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/log"
+	"github.com/gofiber/fiber/v2/middleware/logger"
+	"github.com/gofiber/swagger"
+	"github.com/gofiber/template/html/v2"
+	"github.com/joho/godotenv"
+	"github.com/natewong1313/web-app-template/server/config"
+	"github.com/natewong1313/web-app-template/server/routes"
+	_ "github.com/natewong1313/web-app-template/server/swagger"
+)
+
+// @title Web App Template API
+// @version 1.0
+// @description This is a sample api
+// @host localhost:3000
+// @BasePath /
+func main() {
+	if err := godotenv.Load(); err != nil {
+		log.Error(err)
+		return
+	}
+	cfg, err := config.Init()
+	if err != nil {
+		log.Error(err)
+		return
+	}
+	_ = cfg
+
+	fiberCFG := fiber.Config{}
+	if os.Getenv("APP_ENV") == "production" {
+		fiberCFG.Views = html.New("./dist", ".html")
+	}
+	app := fiber.New(fiberCFG)
+	app.Use(logger.New())
+	app.Get("/swagger/*", swagger.HandlerDefault)
+
+	routes.Setup(app)
+
+	if os.Getenv("APP_ENV") == "production" && os.Getenv("PORT") != "" {
+		if err = app.Listen(":" + os.Getenv("PORT")); err != nil {
+			log.Error(err)
+		}
+	} else {
+		if err = app.Listen(":3000"); err != nil {
+			log.Error(err)
+		}
+	}
+}

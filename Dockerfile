@@ -8,7 +8,7 @@ RUN pnpm run build
 
 FROM golang:1.20 as build-server
 
-ADD ./server /app
+ADD . /app
 WORKDIR /app
 COPY --from=build-frontend /build/dist ./dist
 
