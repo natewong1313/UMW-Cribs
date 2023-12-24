@@ -6,8 +6,8 @@ const config = {
   singleQuote: false,
   importOrder: ["^@ui/(.*)$", "^[./]"],
   plugins: [
-    "@trivago/prettier-plugin-sort-imports",
-    "prettier-plugin-tailwindcss",
+    // "@trivago/prettier-plugin-sort-imports",
+    require.resolve("prettier-plugin-tailwindcss"),
   ],
 }
 

@@ -3,17 +3,18 @@ package scrapers
 import (
 	"bytes"
 	"fmt"
-	"github.com/buger/jsonparser"
-	"github.com/natewong1313/web-app-template/server/database"
-	"github.com/rs/zerolog"
-	"golang.org/x/text/cases"
-	"golang.org/x/text/language"
 	"io"
 	"net/http"
 	"os"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/buger/jsonparser"
+	"github.com/natewong1313/web-app-template/server/database"
+	"github.com/rs/zerolog"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 type weichertScraper struct {
@@ -28,13 +29,16 @@ func ScrapeWeichert() map[string]*database.Listing {
 			listings: make(map[string]*database.Listing),
 		},
 	}
+
+	// proxyUrl, _ := url.Parse("http://127.0.0.1:8888")
+	// ws.client = &http.Client{Transport: &http.Transport{Proxy: http.ProxyURL(proxyUrl)}}
 	ws.findAllListings(1)
 	return ws.listings
 }
 
 func (ws *weichertScraper) findAllListings(currentPage int) {
 	ws.logger.Info().Msgf("Scraping Weichert page %d", currentPage)
-	reqBody := []byte(fmt.Sprintf(`{"redirectRequired":false,"currentSearch":""pg=%d&stypeid=3&zip=22401","form":null}`, currentPage))
+	reqBody := []byte(fmt.Sprintf(`{"redirectRequired":false,"currentSearch":"pg=%d&stypeid=3&zip=22401","form":null}`, currentPage))
 
 	req, err := http.NewRequest("POST", "https://www.weichert.com/api/search", bytes.NewBuffer(reqBody))
 	if err != nil {
@@ -127,7 +131,6 @@ func (ws *weichertScraper) parseListingSource(listingData []byte) database.Sourc
 func (ws *weichertScraper) parseListingImages(listingData []byte) []database.Image {
 	var images []database.Image
 	_, _ = jsonparser.ArrayEach(listingData, func(photoData []byte, dataType jsonparser.ValueType, offset int, err error) {
-		fmt.Println(string(photoData))
 		images = append(images, database.Image{URL: "https:" + string(photoData)})
 	}, "images")
 	return images

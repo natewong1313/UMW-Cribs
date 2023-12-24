@@ -6,7 +6,7 @@ import (
 )
 
 type Config struct {
-	db *gorm.DB
+	DB *gorm.DB
 }
 
 func Init() (*Config, error) {
@@ -15,6 +15,6 @@ func Init() (*Config, error) {
 		return nil, err
 	}
 	return &Config{
-		db: db,
+		DB: db,
 	}, nil
 }

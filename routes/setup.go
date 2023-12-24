@@ -4,18 +4,25 @@ import (
 	"os"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/natewong1313/web-app-template/server/config"
 )
 
-func Setup(app *fiber.App) {
-	parentGroup := app.Group("/api")
-	parentGroup.Get("/test", func(c *fiber.Ctx) error {
-		return c.SendString(os.Getenv("APP_ENV"))
-	})
-	setupDogsRoutes(parentGroup.Group("/dogs"))
+type router struct {
+	app *fiber.App
+	cfg *config.Config
+}
 
+func Setup(app *fiber.App, cfg *config.Config) {
+	r := router{
+		app: app,
+		cfg: cfg,
+	}
+
+	routeGroup := r.app.Group("/api")
+	r.setupListingsRoutes(routeGroup.Group("/listings"))
 	if os.Getenv("APP_ENV") == "production" {
-		app.Static("/", "./dist")
-		app.Get("*", func(c *fiber.Ctx) error {
+		r.app.Static("/", "./dist")
+		r.app.Get("*", func(c *fiber.Ctx) error {
 			return c.Render("index", fiber.Map{})
 		})
 	}

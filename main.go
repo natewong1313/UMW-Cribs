@@ -29,7 +29,6 @@ func main() {
 		log.Error(err)
 		return
 	}
-	_ = cfg
 
 	fiberCFG := fiber.Config{}
 	if os.Getenv("APP_ENV") == "production" {
@@ -39,7 +38,7 @@ func main() {
 	app.Use(logger.New())
 	app.Get("/swagger/*", swagger.HandlerDefault)
 
-	routes.Setup(app)
+	routes.Setup(app, cfg)
 
 	if os.Getenv("APP_ENV") == "production" && os.Getenv("PORT") != "" {
 		if err = app.Listen(":" + os.Getenv("PORT")); err != nil {
