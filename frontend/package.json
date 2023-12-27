@@ -10,18 +10,20 @@
   "dependencies": {
     "@fontsource-variable/manrope": "^5.0.18",
     "@headlessui/react": "^1.7.17",
+    "@rsbuild/core": "^0.2.9",
+    "@rsbuild/plugin-react": "^0.2.9",
     "@tabler/icons-react": "^2.44.0",
     "@tailwindcss/forms": "^0.5.7",
     "clsx": "^2.0.0",
+    "firebase": "^10.7.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-query": "^3.39.3",
     "react-router-dom": "^6.20.1",
+    "swr": "^2.2.4",
     "tailwind-merge": "^2.2.0"
   },
   "devDependencies": {
-    "@rsbuild/core": "^0.1.8",
-    "@rsbuild/plugin-react": "^0.1.8",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@typescript-eslint/eslint-plugin": "^6.13.1",

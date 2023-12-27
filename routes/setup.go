@@ -17,13 +17,15 @@ func Setup(app *fiber.App, cfg *config.Config) {
 		app: app,
 		cfg: cfg,
 	}
-
-	routeGroup := r.app.Group("/api")
-	r.setupListingsRoutes(routeGroup.Group("/listings"))
 	if os.Getenv("APP_ENV") == "production" {
 		r.app.Static("/", "./dist")
 		r.app.Get("*", func(c *fiber.Ctx) error {
 			return c.Render("index", fiber.Map{})
 		})
 	}
+
+	routeGroup := r.app.Group("/api")
+	r.setupListingsRoutes(routeGroup.Group("/listings"))
+	r.setupUserRoutes(routeGroup.Group("/user"))
+
 }

@@ -9,6 +9,24 @@
     "host": "localhost:3000",
     "basePath": "/",
     "paths": {
+        "/api/auth/verify": {
+            "get": {
+                "description": "verify auth token from firebase",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "verify auth token from firebase",
+                "operationId": "verify-token",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/VerifyTokenResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/api/dogs": {
             "get": {
                 "description": "get all dogs in database",
@@ -22,6 +40,42 @@
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/DogsResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/listings": {
+            "get": {
+                "description": "get all listings in database",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get all listings",
+                "operationId": "get-listings",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ListingsResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user": {
+            "get": {
+                "description": "get user",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get user",
+                "operationId": "get-user",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/UserResponse"
                         }
                     }
                 }
@@ -78,6 +132,171 @@
                     "items": {
                         "$ref": "#/definitions/Dog"
                     }
+                }
+            }
+        },
+        "ListingsResponse": {
+            "type": "object",
+            "required": [
+                "listings"
+            ],
+            "properties": {
+                "listings": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/database.Listing"
+                    }
+                }
+            }
+        },
+        "UserResponse": {
+            "type": "object",
+            "required": [
+                "user"
+            ],
+            "properties": {
+                "user": {}
+            }
+        },
+        "VerifyTokenResponse": {
+            "type": "object",
+            "required": [
+                "error",
+                "verified"
+            ],
+            "properties": {
+                "error": {
+                    "type": "string"
+                },
+                "verified": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "database.Address": {
+            "type": "object",
+            "required": [
+                "city",
+                "distance",
+                "latitude",
+                "line1",
+                "line2",
+                "longitude",
+                "state",
+                "zip"
+            ],
+            "properties": {
+                "city": {
+                    "type": "string"
+                },
+                "distance": {
+                    "type": "number"
+                },
+                "latitude": {
+                    "type": "number"
+                },
+                "line1": {
+                    "type": "string"
+                },
+                "line2": {
+                    "type": "string"
+                },
+                "longitude": {
+                    "type": "number"
+                },
+                "state": {
+                    "type": "string"
+                },
+                "zip": {
+                    "type": "string"
+                }
+            }
+        },
+        "database.Image": {
+            "type": "object",
+            "required": [
+                "url"
+            ],
+            "properties": {
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "database.Listing": {
+            "type": "object",
+            "required": [
+                "address",
+                "availabilityDate",
+                "available",
+                "bathrooms",
+                "bedrooms",
+                "createdAt",
+                "description",
+                "id",
+                "images",
+                "rent",
+                "source",
+                "squareFootage",
+                "updatedAt"
+            ],
+            "properties": {
+                "address": {
+                    "$ref": "#/definitions/database.Address"
+                },
+                "availabilityDate": {
+                    "type": "string"
+                },
+                "available": {
+                    "type": "boolean"
+                },
+                "bathrooms": {
+                    "type": "number"
+                },
+                "bedrooms": {
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "images": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/database.Image"
+                    }
+                },
+                "rent": {
+                    "type": "integer"
+                },
+                "source": {
+                    "$ref": "#/definitions/database.Source"
+                },
+                "squareFootage": {
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "database.Source": {
+            "type": "object",
+            "required": [
+                "site",
+                "url"
+            ],
+            "properties": {
+                "site": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
                 }
             }
         }

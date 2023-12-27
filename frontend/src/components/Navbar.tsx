@@ -1,14 +1,15 @@
 import { Menu, Transition } from "@headlessui/react"
 import { IconBookmarkFilled, IconSearch, IconX } from "@tabler/icons-react"
-// import type { UserRecord } from "firebase-admin/auth"
 import { Fragment, useEffect, useRef, useState } from "react"
 // import type { Listing } from "../types/listings"
 import cn from "../utils/cn"
-// import AuthModal from "./AuthModal"
+import AuthModal from "./AuthModal"
 import LogoImg from "../assets/logo.png"
+import { DatabaseListing, ListingsResponse } from "../types/types"
+import type { User } from "firebase/auth"
 
 type Props = {
-  //   user: UserRecord | null
+  user: User | null
 }
 export default function Navbar() {
   const [authModalOpen, setAuthModalOpen] = useState(false)
@@ -49,12 +50,12 @@ export default function Navbar() {
           )}
         </div>
       </div>
-      {/* <AuthModal
+      <AuthModal
         isOpen={authModalOpen}
         onClose={() => setAuthModalOpen(false)}
         page={authModalPage}
         setPage={setAuthModalPage}
-      /> */}
+      />
     </>
   )
 }
@@ -64,7 +65,7 @@ function SearchBar() {
   const [searchValue, setSearchValue] = useState("")
   const [showDropdown, setShowDropdown] = useState(false)
   const [isSearching, setIsSearching] = useState(false)
-  const [searchResults, setSearchResults] = useState([])
+  const [searchResults, setSearchResults] = useState<DatabaseListing[]>([])
   useEffect(() => {
     setShowDropdown(searchValue !== "")
     setIsSearching(true)
@@ -72,9 +73,9 @@ function SearchBar() {
       setIsSearching(false)
       if (searchValue !== "") {
         const response = await fetch(
-          "http://localhost:8080/listings/search?search=" + searchValue
+          "/api/listings/search?query=" + searchValue
         )
-        const data = await response.json()
+        const data: ListingsResponse = await response.json()
         setSearchResults(data.listings)
       }
     }, 500)
@@ -82,8 +83,11 @@ function SearchBar() {
     return () => clearTimeout(delayDebounceFn)
   }, [searchValue])
   useEffect(() => {
-    function handleClickOutside(event) {
-      if (searchRef.current && !searchRef.current.contains(event.target)) {
+    function handleClickOutside(event: TouchEvent | MouseEvent) {
+      if (
+        searchRef.current &&
+        !searchRef.current.contains(event.target as Node)
+      ) {
         setShowDropdown(false)
       }
     }
@@ -162,25 +166,19 @@ function SearchBar() {
                   >
                     <img
                       src={listing.images[0].url}
-                      alt={
-                        listing.address.addressLine1 +
-                        " " +
-                        listing.address.addressLine2
-                      }
+                      alt={listing.address.line1 + " " + listing.address.line2}
                       className="h-16 w-16"
                     />
                     <div className="ml-3">
                       <div className="text-sm font-medium text-gray-900">
-                        {listing.address.addressLine1 +
-                          " " +
-                          listing.address.addressLine2}
+                        {listing.address.line1 + " " + listing.address.line2}
                       </div>
                       <div className="text-sm text-gray-500">
                         {listing.bedrooms} bed(s) &bull; {listing.bathrooms}{" "}
                         bath(s)
                       </div>
                       <div className="text-sm text-gray-500">
-                        ${listing.price.toLocaleString()}
+                        ${listing.rent.toLocaleString()}
                       </div>
                     </div>
                   </a>
@@ -201,10 +199,12 @@ function SearchBar() {
 }
 
 function UserOnlyDetails({ user }: Props) {
-  const initials = user?.displayName
-    .split(" ")
-    .map((name) => name[0])
-    .join("")
+  const initials =
+    user?.displayName ||
+    ""
+      .split(" ")
+      .map((name) => name[0])
+      .join("")
   return (
     <div className="flex items-center space-x-4">
       <a
