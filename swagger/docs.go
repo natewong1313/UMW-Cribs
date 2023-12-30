@@ -15,42 +15,6 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/auth/verify": {
-            "get": {
-                "description": "verify auth token from firebase",
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "verify auth token from firebase",
-                "operationId": "verify-token",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/VerifyTokenResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/dogs": {
-            "get": {
-                "description": "get all dogs in database",
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Get all dogs",
-                "operationId": "get-dogs",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/DogsResponse"
-                        }
-                    }
-                }
-            }
-        },
         "/api/listings": {
             "get": {
                 "description": "get all listings in database",
@@ -86,61 +50,27 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/api/user/verify": {
+            "get": {
+                "description": "verify auth token from firebase",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "verify auth token from firebase",
+                "operationId": "verify-token",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/VerifyTokenResponse"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
-        "Dog": {
-            "type": "object",
-            "required": [
-                "age",
-                "breed",
-                "color",
-                "image_url",
-                "name",
-                "traits",
-                "weight"
-            ],
-            "properties": {
-                "age": {
-                    "type": "integer"
-                },
-                "breed": {
-                    "type": "string"
-                },
-                "color": {
-                    "type": "string"
-                },
-                "image_url": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "traits": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "weight": {
-                    "type": "integer"
-                }
-            }
-        },
-        "DogsResponse": {
-            "type": "object",
-            "required": [
-                "dogs"
-            ],
-            "properties": {
-                "dogs": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/Dog"
-                    }
-                }
-            }
-        },
         "ListingsResponse": {
             "type": "object",
             "required": [
@@ -158,10 +88,16 @@ const docTemplate = `{
         "UserResponse": {
             "type": "object",
             "required": [
+                "error",
                 "user"
             ],
             "properties": {
-                "user": {}
+                "error": {
+                    "type": "string"
+                },
+                "user": {
+                    "$ref": "#/definitions/auth.UserRecord"
+                }
             }
         },
         "VerifyTokenResponse": {
@@ -176,6 +112,111 @@ const docTemplate = `{
                 },
                 "verified": {
                     "type": "boolean"
+                }
+            }
+        },
+        "auth.UserInfo": {
+            "type": "object",
+            "required": [
+                "displayName",
+                "email",
+                "phoneNumber",
+                "photoUrl",
+                "providerId",
+                "rawId"
+            ],
+            "properties": {
+                "displayName": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "phoneNumber": {
+                    "type": "string"
+                },
+                "photoUrl": {
+                    "type": "string"
+                },
+                "providerId": {
+                    "description": "In the ProviderUserInfo[] ProviderID can be a short domain name (e.g. google.com),\nor the identity of an OpenID identity provider.\nIn UserRecord.UserInfo it will return the constant string \"firebase\".",
+                    "type": "string"
+                },
+                "rawId": {
+                    "type": "string"
+                }
+            }
+        },
+        "auth.UserMetadata": {
+            "type": "object",
+            "properties": {
+                "creationTimestamp": {
+                    "type": "integer"
+                },
+                "lastLogInTimestamp": {
+                    "type": "integer"
+                },
+                "lastRefreshTimestamp": {
+                    "description": "The time at which the user was last active (ID token refreshed), or 0 if\nthe user was never active.",
+                    "type": "integer"
+                }
+            }
+        },
+        "auth.UserRecord": {
+            "type": "object",
+            "required": [
+                "displayName",
+                "email",
+                "phoneNumber",
+                "photoUrl",
+                "providerId",
+                "rawId"
+            ],
+            "properties": {
+                "customClaims": {
+                    "type": "object",
+                    "additionalProperties": true
+                },
+                "disabled": {
+                    "type": "boolean"
+                },
+                "displayName": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "emailVerified": {
+                    "type": "boolean"
+                },
+                "phoneNumber": {
+                    "type": "string"
+                },
+                "photoUrl": {
+                    "type": "string"
+                },
+                "providerId": {
+                    "description": "In the ProviderUserInfo[] ProviderID can be a short domain name (e.g. google.com),\nor the identity of an OpenID identity provider.\nIn UserRecord.UserInfo it will return the constant string \"firebase\".",
+                    "type": "string"
+                },
+                "providerUserInfo": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/auth.UserInfo"
+                    }
+                },
+                "rawId": {
+                    "type": "string"
+                },
+                "tenantID": {
+                    "type": "string"
+                },
+                "tokensValidAfterMillis": {
+                    "description": "milliseconds since epoch.",
+                    "type": "integer"
+                },
+                "userMetadata": {
+                    "$ref": "#/definitions/auth.UserMetadata"
                 }
             }
         },

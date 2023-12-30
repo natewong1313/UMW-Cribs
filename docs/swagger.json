@@ -67,9 +67,6 @@
     "definitions": {
         "ListingsResponse": {
             "type": "object",
-            "required": [
-                "listings"
-            ],
             "properties": {
                 "listings": {
                     "type": "array",
@@ -81,10 +78,6 @@
         },
         "UserResponse": {
             "type": "object",
-            "required": [
-                "error",
-                "user"
-            ],
             "properties": {
                 "error": {
                     "type": "string"
@@ -96,10 +89,6 @@
         },
         "VerifyTokenResponse": {
             "type": "object",
-            "required": [
-                "error",
-                "verified"
-            ],
             "properties": {
                 "error": {
                     "type": "string"
@@ -111,14 +100,6 @@
         },
         "auth.UserInfo": {
             "type": "object",
-            "required": [
-                "displayName",
-                "email",
-                "phoneNumber",
-                "photoUrl",
-                "providerId",
-                "rawId"
-            ],
             "properties": {
                 "displayName": {
                     "type": "string"
@@ -158,14 +139,6 @@
         },
         "auth.UserRecord": {
             "type": "object",
-            "required": [
-                "displayName",
-                "email",
-                "phoneNumber",
-                "photoUrl",
-                "providerId",
-                "rawId"
-            ],
             "properties": {
                 "customClaims": {
                     "type": "object",
@@ -216,16 +189,6 @@
         },
         "database.Address": {
             "type": "object",
-            "required": [
-                "city",
-                "distance",
-                "latitude",
-                "line1",
-                "line2",
-                "longitude",
-                "state",
-                "zip"
-            ],
             "properties": {
                 "city": {
                     "type": "string"
@@ -255,9 +218,6 @@
         },
         "database.Image": {
             "type": "object",
-            "required": [
-                "url"
-            ],
             "properties": {
                 "url": {
                     "type": "string"
@@ -266,21 +226,6 @@
         },
         "database.Listing": {
             "type": "object",
-            "required": [
-                "address",
-                "availabilityDate",
-                "available",
-                "bathrooms",
-                "bedrooms",
-                "createdAt",
-                "description",
-                "id",
-                "images",
-                "rent",
-                "source",
-                "squareFootage",
-                "updatedAt"
-            ],
             "properties": {
                 "address": {
                     "$ref": "#/definitions/database.Address"
@@ -328,10 +273,6 @@
         },
         "database.Source": {
             "type": "object",
-            "required": [
-                "site",
-                "url"
-            ],
             "properties": {
                 "site": {
                     "type": "string"

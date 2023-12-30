@@ -1,0 +1,197 @@
+basePath: /
+definitions:
+  ListingsResponse:
+    properties:
+      listings:
+        items:
+          $ref: '#/definitions/database.Listing'
+        type: array
+    type: object
+  UserResponse:
+    properties:
+      error:
+        type: string
+      user:
+        $ref: '#/definitions/auth.UserRecord'
+    type: object
+  VerifyTokenResponse:
+    properties:
+      error:
+        type: string
+      verified:
+        type: boolean
+    type: object
+  auth.UserInfo:
+    properties:
+      displayName:
+        type: string
+      email:
+        type: string
+      phoneNumber:
+        type: string
+      photoUrl:
+        type: string
+      providerId:
+        description: |-
+          In the ProviderUserInfo[] ProviderID can be a short domain name (e.g. google.com),
+          or the identity of an OpenID identity provider.
+          In UserRecord.UserInfo it will return the constant string "firebase".
+        type: string
+      rawId:
+        type: string
+    type: object
+  auth.UserMetadata:
+    properties:
+      creationTimestamp:
+        type: integer
+      lastLogInTimestamp:
+        type: integer
+      lastRefreshTimestamp:
+        description: |-
+          The time at which the user was last active (ID token refreshed), or 0 if
+          the user was never active.
+        type: integer
+    type: object
+  auth.UserRecord:
+    properties:
+      customClaims:
+        additionalProperties: true
+        type: object
+      disabled:
+        type: boolean
+      displayName:
+        type: string
+      email:
+        type: string
+      emailVerified:
+        type: boolean
+      phoneNumber:
+        type: string
+      photoUrl:
+        type: string
+      providerId:
+        description: |-
+          In the ProviderUserInfo[] ProviderID can be a short domain name (e.g. google.com),
+          or the identity of an OpenID identity provider.
+          In UserRecord.UserInfo it will return the constant string "firebase".
+        type: string
+      providerUserInfo:
+        items:
+          $ref: '#/definitions/auth.UserInfo'
+        type: array
+      rawId:
+        type: string
+      tenantID:
+        type: string
+      tokensValidAfterMillis:
+        description: milliseconds since epoch.
+        type: integer
+      userMetadata:
+        $ref: '#/definitions/auth.UserMetadata'
+    type: object
+  database.Address:
+    properties:
+      city:
+        type: string
+      distance:
+        type: number
+      latitude:
+        type: number
+      line1:
+        type: string
+      line2:
+        type: string
+      longitude:
+        type: number
+      state:
+        type: string
+      zip:
+        type: string
+    type: object
+  database.Image:
+    properties:
+      url:
+        type: string
+    type: object
+  database.Listing:
+    properties:
+      address:
+        $ref: '#/definitions/database.Address'
+      availabilityDate:
+        type: string
+      available:
+        type: boolean
+      bathrooms:
+        type: number
+      bedrooms:
+        type: integer
+      createdAt:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      images:
+        items:
+          $ref: '#/definitions/database.Image'
+        type: array
+      rent:
+        type: integer
+      source:
+        $ref: '#/definitions/database.Source'
+      squareFootage:
+        type: integer
+      updatedAt:
+        type: string
+    type: object
+  database.Source:
+    properties:
+      site:
+        type: string
+      url:
+        type: string
+    type: object
+host: localhost:3000
+info:
+  contact: {}
+  description: This is a sample api
+  title: Web App Template API
+  version: "1.0"
+paths:
+  /api/listings:
+    get:
+      description: get all listings in database
+      operationId: get-listings
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ListingsResponse'
+      summary: Get all listings
+  /api/user:
+    get:
+      description: get user
+      operationId: get-user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/UserResponse'
+      summary: Get user
+  /api/user/verify:
+    get:
+      description: verify auth token from firebase
+      operationId: verify-token
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/VerifyTokenResponse'
+      summary: verify auth token from firebase
+swagger: "2.0"

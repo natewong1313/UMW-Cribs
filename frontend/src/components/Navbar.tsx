@@ -5,16 +5,23 @@ import { Fragment, useEffect, useRef, useState } from "react"
 import cn from "../utils/cn"
 import AuthModal from "./AuthModal"
 import LogoImg from "../assets/logo.png"
-import { DatabaseListing, ListingsResponse } from "../types/types"
-import type { User } from "firebase/auth"
+import {
+  AuthUserRecord,
+  DatabaseListing,
+  ListingsResponse,
+} from "../types/types"
+import { UserResponse } from "../types/types"
+import { useQuery } from "react-query"
+import { getUserQuery } from "../query"
 
 type Props = {
-  user: User | null
+  user: AuthUserRecord | null
 }
 export default function Navbar() {
+  const { isLoading, data } = useQuery<UserResponse>(getUserQuery)
   const [authModalOpen, setAuthModalOpen] = useState(false)
   const [authModalPage, setAuthModalPage] = useState(0)
-  const user = null
+  const user = data?.user
   return (
     <>
       <div className="border-b border-slate-200">
@@ -27,7 +34,7 @@ export default function Navbar() {
           {user ? (
             <UserOnlyDetails user={user} />
           ) : (
-            <div className="space-x-2">
+            <div className={cn("space-x-2", isLoading && "invisible")}>
               <button
                 className="rounded-full px-6 py-2.5 font-medium hover:text-gray-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
                 onClick={() => {
@@ -199,12 +206,10 @@ function SearchBar() {
 }
 
 function UserOnlyDetails({ user }: Props) {
-  const initials =
-    user?.displayName ||
-    ""
-      .split(" ")
-      .map((name) => name[0])
-      .join("")
+  const initials = user?.displayName
+    .split(" ")
+    .map((name) => name[0])
+    .join("")
   return (
     <div className="flex items-center space-x-4">
       <a

@@ -32,6 +32,9 @@ func createNewSessionCookie(fbClient *auth.Client, c *fiber.Ctx, idToken string)
 
 func parseIDToken(c *fiber.Ctx) string {
 	authHeader := c.Get("Authorization")
+	if authHeader == "" {
+		return c.Cookies("session")
+	}
 	return strings.ReplaceAll(authHeader, "Bearer ", "")
 }
 
