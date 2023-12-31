@@ -20,9 +20,8 @@ import (
 // @host localhost:3000
 // @BasePath /
 func main() {
-	if err := godotenv.Load(); err != nil {
+	if err := godotenv.Load(); err != nil && (os.Getenv("APP_ENV") != "production" && !os.IsNotExist(err)) {
 		log.Error(err)
-		return
 	}
 	cfg, err := config.Init()
 	if err != nil {
