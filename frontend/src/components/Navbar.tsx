@@ -77,7 +77,6 @@ function SearchBar() {
     setShowDropdown(searchValue !== "")
     setIsSearching(true)
     const delayDebounceFn = setTimeout(async () => {
-      setIsSearching(false)
       if (searchValue !== "") {
         const response = await fetch(
           "/api/listings/search?query=" + searchValue
@@ -85,6 +84,7 @@ function SearchBar() {
         const data: ListingsResponse = await response.json()
         setSearchResults(data.listings)
       }
+      setIsSearching(false)
     }, 500)
 
     return () => clearTimeout(delayDebounceFn)
