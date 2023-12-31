@@ -9,13 +9,18 @@ export type SelectValue = {
   value: string | number
 }
 
-type Props = HTMLProps<HTMLSelectElement> & {
-  label?: string
-  options: SelectValue[]
-  value?: string | number
-  onChange: (value: SelectValue) => void
-  placeholder?: string
-}
+type Modify<T, R> = Omit<T, keyof R> & R
+
+type Props = Modify<
+  HTMLProps<HTMLSelectElement>,
+  {
+    label?: string
+    options: SelectValue[]
+    value?: string | number
+    onChange: (value: SelectValue) => void
+    placeholder?: string
+  }
+>
 
 export default function Select({
   label,

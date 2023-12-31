@@ -3,7 +3,6 @@ import cn from "../../utils/cn"
 
 type Props = HTMLProps<HTMLInputElement> & {
   leftIcon?: ReactNode
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 export default function Input(props: Props) {

@@ -10,7 +10,9 @@ export default defineConfig({
       config.postcssOptions?.plugins?.push(tailwindcss)
     },
   },
-
+  html: {
+    title: "UMW Cribs",
+  },
   server: {
     proxy: {
       "/api": "http://127.0.0.1:3000",
