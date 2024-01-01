@@ -292,13 +292,15 @@ export function SigninForm({ setPage }: SigninFormProps) {
       return
     }
     const idToken = await userCredentials.user.getIdToken()
-    const response = await fetch("/auth/verify", {
+    const response = await fetch("/api/user/verify", {
       headers: { Authorization: "Bearer " + idToken },
     })
-    if (response.ok) {
+    const data: VerifyTokenResponse = await response.json()
+    if (data.verified) {
       window.location.reload()
     } else {
       setShowSpinner(false)
+      setErrorMsg("Something went wrong. Please try again.")
     }
   }
   return (

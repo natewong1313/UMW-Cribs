@@ -1,5 +1,10 @@
 import { Menu, Transition } from "@headlessui/react"
-import { IconBookmarkFilled, IconSearch, IconX } from "@tabler/icons-react"
+import {
+  IconBookmarkFilled,
+  IconSearch,
+  IconUser,
+  IconX,
+} from "@tabler/icons-react"
 import { Fragment, useEffect, useRef, useState } from "react"
 // import type { Listing } from "../types/listings"
 import cn from "../utils/cn"
@@ -207,11 +212,13 @@ function SearchBar() {
 }
 
 function UserOnlyDetails({ user }: Props) {
-  const initials = user?.displayName
-    .split(" ")
-    .map((name) => name[0])
-    .join("")
-    .toUpperCase()
+  const initials =
+    user?.displayName &&
+    user.displayName
+      .split(" ")
+      .map((name) => name[0])
+      .join("")
+      .toUpperCase()
   const onSignOutBtnClick = async () => {
     await fetch("/api/user/signout")
     window.location.href = "/"
@@ -228,7 +235,11 @@ function UserOnlyDetails({ user }: Props) {
       <Menu as="div" className="relative inline-block text-left">
         <div>
           <Menu.Button className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-500 font-medium text-white transition-colors duration-150 hover:bg-gray-400 focus:outline-none">
-            {initials}
+            {initials ? (
+              <span>{initials}</span>
+            ) : (
+              <IconUser size={20} className="text-white" />
+            )}
           </Menu.Button>
         </div>
         <Transition

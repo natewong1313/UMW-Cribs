@@ -116,12 +116,12 @@ export default function SavedListingsPage() {
                               </span>
                             </div>
                           </td>
-                          <td className="relative py-2 pl-2 pr-2 text-sm font-medium sm:pr-2">
+                          <td className="relative py-2 text-sm font-medium">
                             <button
                               onClick={() => onDeleteBtnClick(listing.id)}
-                              className="mt-1 text-red-500 hover:text-red-900"
+                              className="text-red-500 hover:text-red-900"
                             >
-                              <IconX className="h-5 w-5" />
+                              Remove
                             </button>
                           </td>
                         </tr>
