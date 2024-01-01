@@ -22,7 +22,7 @@ export default function HomePage() {
   const { isLoading: likesQueryLoading, data: likesData } =
     useQuery<GetUserLikesResponse>(getUserLikesQuery)
   let likesSet = new Set<string>()
-  if (!likesQueryLoading && likesData) {
+  if (!likesQueryLoading && likesData?.likes) {
     likesSet = new Set(likesData.likes.map((like) => like.listingId))
   }
 
