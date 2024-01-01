@@ -2,7 +2,6 @@ import { IconBookmark } from "@tabler/icons-react"
 import cn from "../utils/cn"
 import { useState } from "react"
 import { DatabaseListing } from "../types/types"
-import { firebaseAuth } from "../utils/firebase"
 
 type Props = {
   listing: DatabaseListing

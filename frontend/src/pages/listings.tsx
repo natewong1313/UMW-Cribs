@@ -2,7 +2,7 @@ import { Popover, Transition } from "@headlessui/react"
 import { IconChevronDown, IconCurrencyDollar } from "@tabler/icons-react"
 import Navbar from "../components/Navbar"
 import Select, { SelectValue } from "../components/shared/Select"
-import { Fragment, useState } from "react"
+import { Fragment, useMemo, useState } from "react"
 import cn from "../utils/cn"
 import shortenNum from "../utils/shortenNum"
 import Label from "../components/shared/Label"
@@ -21,10 +21,16 @@ export default function HomePage() {
     useQuery<ListingsResponse>(getListingsQuery(searchParams, true))
   const { isLoading: likesQueryLoading, data: likesData } =
     useQuery<GetUserLikesResponse>(getUserLikesQuery)
-  let likesSet = new Set<string>()
-  if (!likesQueryLoading && likesData?.likes) {
-    likesSet = new Set(likesData.likes.map((like) => like.listingId))
-  }
+  // let likesSet = new Set<string>()
+  // if (!likesQueryLoading && likesData?.likes) {
+  //   likesSet = new Set(likesData.likes.map((like) => like.listingId))
+  // }
+  const likesSet = useMemo(() => {
+    if (!likesQueryLoading && likesData?.likes) {
+      return new Set(likesData.likes.map((like) => like.listingId))
+    }
+    return new Set<string>()
+  }, [likesData, likesQueryLoading])
 
   const distanceOptions = [
     {

@@ -85,6 +85,17 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/user/signout": {
+            "get": {
+                "description": "sign out",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "sign out",
+                "operationId": "sign-out",
+                "responses": {}
+            }
+        },
         "/api/user/verify": {
             "get": {
                 "description": "verify auth token from firebase",

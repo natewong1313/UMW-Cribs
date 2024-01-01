@@ -29,7 +29,7 @@ export const getListingsQuery = (
     params.append("available", "true")
   }
   return {
-    queryKey: ["getListings", searchParams?.toString()],
+    queryKey: ["getListings" + searchParams?.toString()],
     queryFn: () =>
       fetch(`/api/listings?${searchParams?.toString()}`).then((res) =>
         res.json()

@@ -1,7 +1,7 @@
 import { useQuery } from "react-query"
 import Navbar from "../components/Navbar"
 import { GetUserLikesResponse, ListingsResponse } from "../types/types"
-import { getListingsQuery, getUserLikesQuery } from "../query"
+import { getListingsQuery, getUserLikesQuery, queryClient } from "../query"
 import { Link } from "react-router-dom"
 import cn from "../utils/cn"
 import { IconX } from "@tabler/icons-react"
@@ -41,6 +41,8 @@ export default function SavedListingsPage() {
         action: "unlike",
       }),
     })
+    queryClient.invalidateQueries("getListingsavailable=true")
+    queryClient.resetQueries("getListingsavailable=true")
   }
   return (
     <div>

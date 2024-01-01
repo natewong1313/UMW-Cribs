@@ -14,6 +14,7 @@ import (
 func (r *router) setupUserRoutes(routeGroup fiber.Router) {
 	routeGroup.Get("/", r.getUser)
 	routeGroup.Get("/verify", r.verifyToken)
+	routeGroup.Get("/signout", r.signOut)
 	routeGroup.Get("/likes", r.getUserLikes)
 	routeGroup.Post("/likes", r.updateUserLike)
 }
@@ -190,4 +191,20 @@ func (r *router) verifyToken(c *fiber.Ctx) error {
 	return c.JSON(verifyTokenResponse{
 		Verified: true,
 	})
+}
+
+// SignOut
+//
+//	@Summary		sign out
+//	@Description	sign out
+//	@ID				sign-out
+//	@Produce		json
+//	@Router			/api/user/signout [get]
+func (r *router) signOut(c *fiber.Ctx) error {
+	cookie := new(fiber.Cookie)
+	cookie.Name = "session"
+	cookie.HTTPOnly = true
+	cookie.Expires = time.Now().Add(-3 * time.Second)
+	c.Cookie(cookie)
+	return c.JSON(fiber.Map{})
 }

@@ -212,6 +212,10 @@ function UserOnlyDetails({ user }: Props) {
     .map((name) => name[0])
     .join("")
     .toUpperCase()
+  const onSignOutBtnClick = async () => {
+    await fetch("/api/user/signout")
+    window.location.href = "/"
+  }
   return (
     <div className="flex items-center space-x-4">
       <Link
@@ -281,7 +285,8 @@ function UserOnlyDetails({ user }: Props) {
                 <Menu.Item>
                   {({ active }) => (
                     <button
-                      type="submit"
+                      type="button"
+                      onClick={onSignOutBtnClick}
                       className={cn(
                         active ? "bg-gray-100 text-gray-900" : "text-gray-700",
                         "block w-full px-4 py-2 text-left text-sm"
