@@ -51,7 +51,10 @@ export default function ListingCard({
       />
       <div className="p-4">
         <div className="flex items-center justify-between">
-          <h3 className="text-ld font-semibold">{listing.address.line1}</h3>
+          <h3 className="text-ld font-semibold">
+            {listing.address.line1}{" "}
+            {listing.address.line2 && "#" + listing.address.line2}
+          </h3>
           <button className="group py-2 pl-2" onClick={onLikeBtnClick}>
             <IconBookmark
               className={cn(

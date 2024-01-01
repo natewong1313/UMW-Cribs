@@ -18,7 +18,7 @@ export default function SavedListingsPage() {
     likesSet = new Set(likesData.likes.map((like) => like.listingId))
   }
   const { isLoading: listingsQueryLoading, data: listingsData } =
-    useQuery<ListingsResponse>(getListingsQuery(null))
+    useQuery<ListingsResponse>(getListingsQuery(null, false))
   const [removedListingIds, setRemovedListingIds] = useState<string[]>([])
   const listings = useMemo(
     () =>
@@ -140,6 +140,20 @@ export default function SavedListingsPage() {
                         </td>
                       </tr>
                     )}
+                    {!listingsQueryLoading &&
+                      listings &&
+                      listings.length === 0 && (
+                        <tr>
+                          <td className="py-4 pl-4 pr-3 sm:pl-6">
+                            <div className="text-sm text-gray-500">
+                              You haven&apos;t saved any listings yet.
+                            </div>
+                          </td>
+                          <td className="px-3 py-4"></td>
+                          <td className="px-3 py-4"></td>
+                          <td className="px-3 py-4"></td>
+                        </tr>
+                      )}
                   </tbody>
                 </table>
               </div>

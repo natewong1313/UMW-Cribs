@@ -18,7 +18,7 @@ import { hoveredListingId } from "../stores/listingStore"
 export default function HomePage() {
   const searchParams = new URLSearchParams(window.location.search)
   const { isLoading: listingsQueryLoading, data: listingsData } =
-    useQuery<ListingsResponse>(getListingsQuery(searchParams))
+    useQuery<ListingsResponse>(getListingsQuery(searchParams, true))
   const { isLoading: likesQueryLoading, data: likesData } =
     useQuery<GetUserLikesResponse>(getUserLikesQuery)
   let likesSet = new Set<string>()
@@ -120,7 +120,7 @@ export default function HomePage() {
       </div>
       <div className="flex">
         <div
-          className="max-w-[600px] overflow-auto p-4 xl:max-w-[810px]"
+          className="min-w-[480px] overflow-auto p-4 xl:max-w-[810px]"
           style={{ height: "calc(100vh - 148px)" }}
         >
           <div className="grid grid-cols-2 gap-3 xl:grid-cols-3">
@@ -136,6 +136,14 @@ export default function HomePage() {
                   isLiked={likesSet.has(listing.id)}
                 />
               ))}
+            {!listingsQueryLoading && listingsData?.listings.length == 0 && (
+              <div className="col-span-2 ">
+                <p className="text-lg font-semibold">No listings found</p>
+                <p className="text-gray-500">
+                  Try adjusting your filters or zooming out on the map
+                </p>
+              </div>
+            )}
           </div>
         </div>
         <ListingsMap listings={listingsData?.listings || []} />

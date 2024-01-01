@@ -34,6 +34,9 @@ var distances = map[string]float64{
 func (r *router) getListings(c *fiber.Ctx) error {
 	var listings []database.Listing
 	query := r.cfg.DB.Preload("Address").Preload("Source").Preload("Images")
+	if c.Query("available") != "" {
+		query = query.Where("available = ?", c.Query("available"))
+	}
 	if c.Query("distance") != "" {
 		query = query.Joins("Address").Where("distance <= ?", distances[c.Query("distance")])
 	}

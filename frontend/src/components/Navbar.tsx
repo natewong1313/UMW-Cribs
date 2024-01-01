@@ -13,6 +13,7 @@ import {
 import { UserResponse } from "../types/types"
 import { useQuery } from "react-query"
 import { getUserQuery } from "../query"
+import { Link } from "react-router-dom"
 
 type Props = {
   user: AuthUserRecord | null
@@ -26,10 +27,10 @@ export default function Navbar() {
     <>
       <div className="border-b border-slate-200">
         <div className="mx-auto flex items-center justify-between px-6 py-4">
-          <a href="/" className="flex items-center hover:opacity-90">
+          <Link to="/" className="flex items-center hover:opacity-90">
             <img src={LogoImg} height="48" width="48" />
             <h1 className="ml-2 text-lg font-semibold">UMW Cribs</h1>
-          </a>
+          </Link>
           <SearchBar />
           {user ? (
             <UserOnlyDetails user={user} />
@@ -213,13 +214,13 @@ function UserOnlyDetails({ user }: Props) {
     .toUpperCase()
   return (
     <div className="flex items-center space-x-4">
-      <a
-        href="/saved"
+      <Link
+        to="/saved"
         className="flex items-center rounded-[0.4rem] p-2 font-medium text-gray-600 hover:bg-gray-100"
       >
         <IconBookmarkFilled size={18} className="mr-1.5 text-gray-400" />
         Saved
-      </a>
+      </Link>
       <Menu as="div" className="relative inline-block text-left">
         <div>
           <Menu.Button className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-500 font-medium text-white transition-colors duration-150 hover:bg-gray-400 focus:outline-none">

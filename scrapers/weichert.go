@@ -38,7 +38,7 @@ func ScrapeWeichert() map[string]*database.Listing {
 
 func (ws *weichertScraper) findAllListings(currentPage int) {
 	ws.logger.Info().Msgf("Scraping Weichert page %d", currentPage)
-	reqBody := []byte(fmt.Sprintf(`{"redirectRequired":false,"currentSearch":"pg=%d&stypeid=3&zip=22401","form":null}`, currentPage))
+	reqBody := []byte(fmt.Sprintf(`{"redirectRequired":false,"currentSearch":"pg=%d&stypeid=3&zip=22401","location":{"id":"22401","searchType":"zip"},"form":null}`, currentPage))
 
 	req, err := http.NewRequest("POST", "https://www.weichert.com/api/search", bytes.NewBuffer(reqBody))
 	if err != nil {
@@ -108,15 +108,23 @@ func (ws *weichertScraper) parseListings(body []byte) error {
 
 func (ws *weichertScraper) parseListingAddress(listingData []byte) database.Address {
 	var address database.Address
-
 	address1, _ := jsonparser.GetString(listingData, "addr")
-	address.Line1 = cases.Title(language.Und, cases.NoLower).String(strings.ToLower(address1))
+	address2 := ""
+	if strings.Contains(address1, "#") {
+		address2 = strings.Split(address1, "# ")[1]
+		address1 = strings.Split(address1, "# ")[0]
+	}
+
+	address1 = cases.Title(language.Und, cases.NoLower).String(strings.ToLower(address1))
+	address.Line1 = strings.ReplaceAll(address1, "APT ", "")
+	address.Line2 = strings.ToUpper(address2)
 	address.City, _ = jsonparser.GetString(listingData, "city")
 	address.State, _ = jsonparser.GetString(listingData, "state")
 	address.Zip, _ = jsonparser.GetString(listingData, "zip")
 	address.Latitude, _ = jsonparser.GetFloat(listingData, "lat")
 	address.Longitude, _ = jsonparser.GetFloat(listingData, "lng")
 	address.Distance = calcDistanceFromUMW(address.Latitude, address.Longitude)
+	// address.ID = createID(address.Line1, address.Line2)
 	return address
 }
 

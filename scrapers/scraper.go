@@ -1,11 +1,13 @@
 package scrapers
 
 import (
+	"net/http"
+	"os"
+
+	"github.com/joho/godotenv"
+	"github.com/natewong1313/web-app-template/server/config"
 	"github.com/natewong1313/web-app-template/server/database"
 	"github.com/rs/zerolog"
-	"math"
-	"net/http"
-	"strings"
 )
 
 type scraper struct {
@@ -14,25 +16,78 @@ type scraper struct {
 	listings map[string]*database.Listing
 }
 
-func createID(address1, address2 string) string {
-	return strings.ReplaceAll(strings.TrimSuffix(strings.ToLower(strings.TrimSpace(address1)+"-"+address2), "-"), " ", "-")
-}
-
-func calcDistanceFromUMW(lat float64, lng float64) float64 {
-	umwLatitude := 38.3013
-	umwLongitude := -77.4745
-	radlat1 := math.Pi * lat / 180
-	radlat2 := math.Pi * umwLatitude / 180
-
-	theta := lng - umwLongitude
-	radtheta := math.Pi * theta / 180
-
-	dist := math.Sin(radlat1)*math.Sin(radlat2) + math.Cos(radlat1)*math.Cos(radlat2)*math.Cos(radtheta)
-	if dist > 1 {
-		dist = 1
+func Start() {
+	log := zerolog.New(zerolog.ConsoleWriter{Out: os.Stderr}).With().Timestamp().Logger()
+	if err := godotenv.Load("../.env"); err != nil && (os.Getenv("APP_ENV") != "production" && !os.IsNotExist(err)) {
+		log.Fatal().Err(err).Msg("Failed to load .env file")
+	}
+	cfg, err := config.Init()
+	if err != nil {
+		log.Fatal().Err(err).Msg("Failed to init config")
 	}
 
-	dist = math.Acos(dist)
+	var oldListingsArr []*database.Listing
+	cfg.DB.Find(&oldListingsArr)
+	oldListings := make(map[string]*database.Listing)
+	for _, listing := range oldListingsArr {
+		oldListings[listing.ID] = listing
+	}
 
-	return (dist * 180 / math.Pi) * 60 * 1.1515
+	scrapedListings := make(map[string]*database.Listing)
+
+	weichertListings := ScrapeWeichert()
+	for _, listing := range weichertListings {
+		if listing.ID == "1115-winchester-street-a" {
+			continue
+		}
+		scrapedListings[listing.ID] = listing
+	}
+
+	var unavailableListingIDs []string
+	for _, listing := range oldListings {
+		if _, ok := scrapedListings[listing.ID]; !ok {
+			unavailableListingIDs = append(unavailableListingIDs, listing.ID)
+		}
+	}
+
+	var newListings []*database.Listing
+	for _, listing := range scrapedListings {
+		if _, ok := oldListings[listing.ID]; !ok {
+			newListings = append(newListings, listing)
+		}
+	}
+
+	// update any unavailable listings
+	if len(unavailableListingIDs) > 0 {
+		log.Info().Msgf("Marking %d listings as unavailable", len(unavailableListingIDs))
+		cfg.DB.Model(&database.Listing{}).Where("id IN ?", unavailableListingIDs).Update("available", false)
+	}
+
+	// create any new listings
+	if len(newListings) > 0 {
+		log.Info().Msgf("Creating %d new listings", len(newListings))
+		cfg.DB.Create(newListings)
+	}
+
+	// var newListings []*database.Listing
+	// for listingID, listing := range newListings {
+	// 	// check if in old listings
+	// 	// if not, add to new listings
+	// 	if _, ok := newListings[listing.ID]; !ok {
+	// 		newListings = append(newListings, listing)
+	// 	}
+	// }
+
+	// listingsArr := make([]*database.Listing, 0, len(newListings))
+	// for _, listing := range newListings {
+	// 	listingsArr = append(listingsArr, listing)
+	// }
+
+	// cfg.DB.Session(&gorm.Session{FullSaveAssociations: true}).Clauses(clause.OnConflict{
+	// 	Columns:   []clause.Column{{Name: "id"}},
+	// 	DoUpdates: clause.AssignmentColumns([]string{"rent", "available"}),
+	// }).Create(listingsArr)
+	// for _, listing := range listings {
+	// 	db.Create(&listing)
+	// }
 }
