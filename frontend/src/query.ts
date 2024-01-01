@@ -20,10 +20,12 @@ export const getUserQuery = {
   retry: 5,
 }
 
-export const getListingsQuery = (searchParams: URLSearchParams) => ({
-  queryKey: ["getListings", searchParams.toString()],
+export const getListingsQuery = (searchParams: URLSearchParams | null) => ({
+  queryKey: ["getListings", searchParams?.toString()],
   queryFn: () =>
-    fetch(`/api/listings?${searchParams.toString()}`).then((res) => res.json()),
+    fetch(`/api/listings?${searchParams?.toString()}`).then((res) =>
+      res.json()
+    ),
   retry: 5,
 })
 

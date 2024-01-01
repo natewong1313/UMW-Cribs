@@ -1,21 +1,21 @@
 import React from "react"
 import ReactDOM from "react-dom/client"
-import Dogs from "./dogs"
 import { QueryClientProvider } from "react-query"
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import "./index.css"
-import Listings from "./pages/listings"
+import ListingsPage from "./pages/listings"
 import { queryClient } from "./query"
 import "@fontsource-variable/manrope"
+import SavedListingsPage from "./pages/saved"
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Listings />,
+    element: <ListingsPage />,
   },
   {
-    path: "/dogs",
-    element: <Dogs />,
+    path: "/saved",
+    element: <SavedListingsPage />,
   },
 ])
 

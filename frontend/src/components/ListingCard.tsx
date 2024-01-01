@@ -22,8 +22,6 @@ export default function ListingCard({
     e.preventDefault()
     e.stopPropagation()
     setOptimisticLike(!optimisticLike)
-    const token = await firebaseAuth.currentUser?.getIdToken()
-    console.log(token)
     await fetch("/api/user/likes", {
       method: "POST",
       headers: {

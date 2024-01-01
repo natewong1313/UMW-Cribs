@@ -248,39 +248,44 @@ export function SignupForm() {
   )
 }
 
+interface SigninFormElements extends HTMLFormControlsCollection {
+  email: HTMLInputElement
+  password: HTMLInputElement
+}
+interface SigninFormElement extends HTMLFormElement {
+  readonly elements: SigninFormElements
+}
+
 export function SigninForm() {
   const [showSpinner, setShowSpinner] = useState(false)
   const [errorMsg, setErrorMsg] = useState("")
-  //   const onFormSubmit = async (event) => {
-  //     event.preventDefault()
-  //     setShowSpinner(true)
-  //     let userCredentials: UserCredential
-  //     try {
-  //       userCredentials = await signInWithEmailAndPassword(
-  //         firebaseAuth,
-  //         event.target.email.value,
-  //         event.target.password.value
-  //       )
-  //     } catch (error) {
-  //       setErrorMsg(parseFireBaseError(error))
-  //       setShowSpinner(false)
-  //       return
-  //     }
-  //     const idToken = await userCredentials.user.getIdToken()
-  //     const response = await fetch("/auth/verify", {
-  //       headers: { Authorization: "Bearer " + idToken },
-  //     })
-  //     if (response.ok) {
-  //       window.location.reload()
-  //     } else {
-  //       setShowSpinner(false)
-  //     }
-  //   }
+  const onFormSubmit = async (event: React.FormEvent<SigninFormElement>) => {
+    event.preventDefault()
+    setShowSpinner(true)
+    let userCredentials: UserCredential
+    try {
+      userCredentials = await signInWithEmailAndPassword(
+        firebaseAuth,
+        event.currentTarget.elements.email.value,
+        event.currentTarget.elements.password.value
+      )
+    } catch (error) {
+      setErrorMsg(parseFireBaseError(error as FirebaseError))
+      setShowSpinner(false)
+      return
+    }
+    const idToken = await userCredentials.user.getIdToken()
+    const response = await fetch("/auth/verify", {
+      headers: { Authorization: "Bearer " + idToken },
+    })
+    if (response.ok) {
+      window.location.reload()
+    } else {
+      setShowSpinner(false)
+    }
+  }
   return (
-    <form
-      className="mt-4"
-      //  onSubmit={onFormSubmit}
-    >
+    <form className="mt-4" onSubmit={onFormSubmit}>
       <Label htmlFor="email">Email address</Label>
       <div className="mt-1">
         <Input
