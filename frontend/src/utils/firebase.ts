@@ -26,7 +26,8 @@ export function parseFireBaseError(error: FirebaseError) {
     case "auth/user-not-found":
       return "This email address is not registered."
     case "auth/invalid-login-credentials":
-      return "The password is invalid or the user does not have a password."
+    case "auth/invalid-credential":
+      return "The password is invalid or the user does not exist."
     default:
       return error.message
   }

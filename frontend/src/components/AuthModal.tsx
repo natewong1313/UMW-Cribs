@@ -2,6 +2,7 @@ import { Dialog, Transition } from "@headlessui/react"
 import { IconX } from "@tabler/icons-react"
 import {
   createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   updateProfile,
   type UserCredential,
@@ -65,7 +66,7 @@ export default function AuthModal({ isOpen, onClose, page, setPage }: Props) {
                   </button>
                 </div>
 
-                {page == 0 ? (
+                {page == 0 && (
                   <>
                     <Dialog.Title className="text-lg font-semibold">
                       Welcome back
@@ -79,9 +80,10 @@ export default function AuthModal({ isOpen, onClose, page, setPage }: Props) {
                         Sign up instead
                       </button>
                     </p>
-                    <SigninForm />
+                    <SigninForm setPage={setPage} />
                   </>
-                ) : (
+                )}
+                {page == 1 && (
                   <>
                     <Dialog.Title className="text-lg font-semibold">
                       Create an account
@@ -96,6 +98,18 @@ export default function AuthModal({ isOpen, onClose, page, setPage }: Props) {
                       </button>
                     </p>
                     <SignupForm />
+                  </>
+                )}
+                {page == 2 && (
+                  <>
+                    <Dialog.Title className="text-lg font-semibold">
+                      Reset your password
+                    </Dialog.Title>
+                    <p className="mt-1 text-sm font-medium text-gray-500">
+                      Enter your email address and we will send you a link to
+                      reset your password.
+                    </p>
+                    <GetResetPasswordEmailForm setPage={setPage} />
                   </>
                 )}
               </Dialog.Panel>
@@ -256,7 +270,10 @@ interface SigninFormElement extends HTMLFormElement {
   readonly elements: SigninFormElements
 }
 
-export function SigninForm() {
+type SigninFormProps = {
+  setPage: (page: number) => void
+}
+export function SigninForm({ setPage }: SigninFormProps) {
   const [showSpinner, setShowSpinner] = useState(false)
   const [errorMsg, setErrorMsg] = useState("")
   const onFormSubmit = async (event: React.FormEvent<SigninFormElement>) => {
@@ -306,7 +323,11 @@ export function SigninForm() {
           required
         />
       </div>
-      <button className="mt-2 text-sm font-medium text-gray-500 hover:underline">
+      <button
+        type="button"
+        className="mt-2 text-sm font-medium text-gray-500 hover:underline"
+        onClick={() => setPage(2)}
+      >
         Forgot your password?
       </button>
       <button
@@ -342,6 +363,102 @@ export function SigninForm() {
         }
       >
         {errorMsg}
+      </p>
+    </form>
+  )
+}
+
+interface GetResetPasswordEmailFormElements extends HTMLFormControlsCollection {
+  email: HTMLInputElement
+}
+interface GetResetPasswordEmailFormElement extends HTMLFormElement {
+  readonly elements: GetResetPasswordEmailFormElements
+}
+
+type GetResetPasswordEmailFormProps = {
+  setPage: (page: number) => void
+}
+export function GetResetPasswordEmailForm({
+  setPage,
+}: GetResetPasswordEmailFormProps) {
+  const [showSpinner, setShowSpinner] = useState(false)
+  const [errorMsg, setErrorMsg] = useState("")
+  const [emailSent, setEmailSent] = useState(false)
+  const onFormSubmit = async (
+    event: React.FormEvent<GetResetPasswordEmailFormElement>
+  ) => {
+    event.preventDefault()
+    setShowSpinner(true)
+    try {
+      await sendPasswordResetEmail(
+        firebaseAuth,
+        event.currentTarget.elements.email.value
+      )
+    } catch (error) {
+      setErrorMsg(parseFireBaseError(error as FirebaseError))
+      setShowSpinner(false)
+      return
+    }
+    setEmailSent(true)
+    setShowSpinner(false)
+  }
+  return (
+    <form className="mt-4" onSubmit={onFormSubmit}>
+      <Label htmlFor="email">Email address</Label>
+      <div className="mt-1">
+        <Input
+          type="email"
+          name="email"
+          id="email"
+          placeholder="Enter email"
+          required
+        />
+      </div>
+      <button
+        type="submit"
+        disabled={showSpinner}
+        className="mt-4 flex w-full justify-center rounded-full bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:bg-blue-400"
+      >
+        {showSpinner ? (
+          <svg
+            aria-hidden="true"
+            role="status"
+            className="me-3 inline h-6 w-6 animate-spin p-1 text-white"
+            viewBox="0 0 100 101"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+              fill="#E5E7EB"
+            />
+            <path
+              d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+              fill="currentColor"
+            />
+          </svg>
+        ) : (
+          "Get email"
+        )}
+      </button>
+      <p
+        className={
+          "text-center text-sm text-red-500 " + (errorMsg != "" && "mt-2")
+        }
+      >
+        {errorMsg}
+      </p>
+      <p className="mt-2 text-sm text-blue-500">
+        {emailSent && "Email has been sent, check your inbox"}
+      </p>
+      <p className="mt-2 text-sm text-gray-500">
+        Changed your mind?{" "}
+        <button
+          className="text-blue-500 hover:underline"
+          onClick={() => setPage(0)}
+        >
+          Sign in instead
+        </button>
       </p>
     </form>
   )
