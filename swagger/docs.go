@@ -51,6 +51,40 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/user/likes": {
+            "get": {
+                "description": "get user likes",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get user likes",
+                "operationId": "get-user-likes",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/GetUserLikesResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "update user like",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Update user like",
+                "operationId": "update-user-like",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/UpdateUserLikeResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/api/user/verify": {
             "get": {
                 "description": "verify auth token from firebase",
@@ -71,6 +105,24 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "GetUserLikesResponse": {
+            "type": "object",
+            "required": [
+                "error",
+                "likes"
+            ],
+            "properties": {
+                "error": {
+                    "type": "string"
+                },
+                "likes": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/database.Like"
+                    }
+                }
+            }
+        },
         "ListingsResponse": {
             "type": "object",
             "required": [
@@ -82,6 +134,17 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/database.Listing"
                     }
+                }
+            }
+        },
+        "UpdateUserLikeResponse": {
+            "type": "object",
+            "required": [
+                "error"
+            ],
+            "properties": {
+                "error": {
+                    "type": "string"
                 }
             }
         },
@@ -266,6 +329,21 @@ const docTemplate = `{
             ],
             "properties": {
                 "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "database.Like": {
+            "type": "object",
+            "required": [
+                "createdAt",
+                "listingId"
+            ],
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "listingId": {
                     "type": "string"
                 }
             }

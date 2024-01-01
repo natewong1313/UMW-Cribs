@@ -9,8 +9,17 @@
  * ---------------------------------------------------------------
  */
 
+export interface GetUserLikesResponse {
+  error: string;
+  likes: DatabaseLike[];
+}
+
 export interface ListingsResponse {
   listings: DatabaseListing[];
+}
+
+export interface UpdateUserLikeResponse {
+  error: string;
 }
 
 export interface UserResponse {
@@ -82,6 +91,11 @@ export interface DatabaseAddress {
 
 export interface DatabaseImage {
   url: string;
+}
+
+export interface DatabaseLike {
+  createdAt: string;
+  listingId: string;
 }
 
 export interface DatabaseListing {

@@ -4,14 +4,14 @@ import Dogs from "./dogs"
 import { QueryClientProvider } from "react-query"
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import "./index.css"
-import Home from "./pages/home"
+import Listings from "./pages/listings"
 import { queryClient } from "./query"
 import "@fontsource-variable/manrope"
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
+    element: <Listings />,
   },
   {
     path: "/dogs",

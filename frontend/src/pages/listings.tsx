@@ -7,9 +7,25 @@ import cn from "../utils/cn"
 import shortenNum from "../utils/shortenNum"
 import Label from "../components/shared/Label"
 import Input from "../components/shared/Input"
+import { GetUserLikesResponse, ListingsResponse } from "../types/types"
+import { useQuery } from "react-query"
+import ListingCard from "../components/ListingCard"
+import ListingCardSkeleton from "../components/ListingCardSkeleton"
+import { getListingsQuery, getUserLikesQuery } from "../query"
+import ListingsMap from "../components/ListingsMap"
+import { hoveredListingId } from "../stores/listingStore"
 
 export default function HomePage() {
   const searchParams = new URLSearchParams(window.location.search)
+  const { isLoading: listingsQueryLoading, data: listingsData } =
+    useQuery<ListingsResponse>(getListingsQuery(searchParams))
+  const { isLoading: likesQueryLoading, data: likesData } =
+    useQuery<GetUserLikesResponse>(getUserLikesQuery)
+  let likesSet = new Set<string>()
+  if (!likesQueryLoading && likesData) {
+    likesSet = new Set(likesData.likes.map((like) => like.listingId))
+  }
+
   const distanceOptions = [
     {
       label: "Walking (0.5 mi.)",
@@ -62,9 +78,6 @@ export default function HomePage() {
 
   return (
     <div>
-      <head>
-        <title>UMW Cribs</title>
-      </head>
       <Navbar />
       <div className="border-b border-gray-200 bg-gray-100 px-4 py-2">
         <div className="flex items-center justify-between">
@@ -104,6 +117,28 @@ export default function HomePage() {
             />
           </div>
         </div>
+      </div>
+      <div className="flex">
+        <div
+          className="max-w-[600px] overflow-auto p-4 xl:max-w-[810px]"
+          style={{ height: "calc(100vh - 148px)" }}
+        >
+          <div className="grid grid-cols-2 gap-3 xl:grid-cols-3">
+            {listingsQueryLoading &&
+              [...Array(6).keys()].map((i) => <ListingCardSkeleton key={i} />)}
+            {!listingsQueryLoading &&
+              listingsData?.listings.map((listing) => (
+                <ListingCard
+                  listing={listing}
+                  key={listing.id}
+                  onMouseOver={() => hoveredListingId.set(listing.id)}
+                  onMouseOut={() => hoveredListingId.set("")}
+                  isLiked={likesSet.has(listing.id)}
+                />
+              ))}
+          </div>
+        </div>
+        <ListingsMap listings={listingsData?.listings || []} />
       </div>
     </div>
   )

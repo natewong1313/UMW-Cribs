@@ -47,3 +47,10 @@ type Image struct {
 	ListingID string    `json:"-"`
 	URL       string    `json:"url"`
 }
+
+type Like struct {
+	ID        uuid.UUID `json:"-" gorm:"primary_key;type:uuid;default:uuid_generate_v4()"`
+	ListingID string    `json:"listingId"`
+	UserID    string    `json:"-"`
+	CreatedAt time.Time `json:"createdAt"`
+}

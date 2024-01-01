@@ -1,17 +1,21 @@
 package routes
 
 import (
+	"context"
 	"strings"
 	"time"
 
 	"firebase.google.com/go/auth"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/log"
+	"github.com/natewong1313/web-app-template/server/database"
 )
 
 func (r *router) setupUserRoutes(routeGroup fiber.Router) {
 	routeGroup.Get("/", r.getUser)
 	routeGroup.Get("/verify", r.verifyToken)
+	routeGroup.Get("/likes", r.getUserLikes)
+	routeGroup.Post("/likes", r.updateUserLike)
 }
 
 func createNewSessionCookie(fbClient *auth.Client, c *fiber.Ctx, idToken string) error {
@@ -38,6 +42,19 @@ func parseIDToken(c *fiber.Ctx) string {
 	return strings.ReplaceAll(authHeader, "Bearer ", "")
 }
 
+func getUserFromReq(fbClient *auth.Client, c *fiber.Ctx) (*auth.UserRecord, error) {
+	idToken := parseIDToken(c)
+	decoded, err := fbClient.VerifySessionCookieAndCheckRevoked(context.Background(), idToken)
+	if err != nil {
+		return nil, err
+	}
+	user, err := fbClient.GetUser(context.Background(), decoded.UID)
+	if err != nil {
+		return nil, err
+	}
+	return user, nil
+}
+
 type userResponse struct {
 	User  *auth.UserRecord `json:"user"`
 	Error string           `json:"error"`
@@ -51,16 +68,8 @@ type userResponse struct {
 // @Success		200		{object}	userResponse
 // @Router			/api/user [get]
 func (r *router) getUser(c *fiber.Ctx) error {
-	idToken := parseIDToken(c)
 
-	decoded, err := r.cfg.FirebaseClient.VerifySessionCookieAndCheckRevoked(c.Context(), idToken)
-	if err != nil {
-		return c.Status(401).JSON(userResponse{
-			Error: err.Error(),
-		})
-	}
-
-	user, err := r.cfg.FirebaseClient.GetUser(c.Context(), decoded.UID)
+	user, err := getUserFromReq(r.cfg.FirebaseClient, c)
 	if err != nil {
 		return c.Status(401).JSON(userResponse{
 			Error: err.Error(),
@@ -70,6 +79,88 @@ func (r *router) getUser(c *fiber.Ctx) error {
 	return c.JSON(userResponse{
 		User: user,
 	})
+}
+
+type getUserLikesResponse struct {
+	Likes []database.Like `json:"likes"`
+	Error string          `json:"error"`
+} //@name GetUserLikesResponse
+
+// GetUserLikes
+// @Summary		Get user likes
+// @Description	get user likes
+// @ID				get-user-likes
+// @Produce		json
+// @Success		200		{object}	getUserLikesResponse
+// @Router			/api/user/likes [get]
+func (r *router) getUserLikes(c *fiber.Ctx) error {
+	user, err := getUserFromReq(r.cfg.FirebaseClient, c)
+	if err != nil {
+		return c.Status(401).JSON(getUserLikesResponse{
+			Error: err.Error(),
+		})
+	}
+
+	var likes []database.Like
+	if err := r.cfg.DB.Where("user_id = ?", user.UID).Find(&likes).Error; err != nil {
+		return c.Status(400).JSON(getUserLikesResponse{
+			Error: err.Error(),
+		})
+	}
+
+	return c.JSON(getUserLikesResponse{
+		Likes: likes,
+	})
+}
+
+type updateUserLikeBody struct {
+	ListingID string `json:"listingId"`
+	Action    string `json:"action"`
+} //@name UpdateUserLikeBody
+
+type updateUserLikeResponse struct {
+	Error string `json:"error"`
+} //@name UpdateUserLikeResponse
+
+// UpdateUserLike
+// @Summary		Update user like
+// @Description	update user like
+// @ID				update-user-like
+// @Produce		json
+// @Success		200		{object}	updateUserLikeResponse
+// @Router			/api/user/likes [post]
+func (r *router) updateUserLike(c *fiber.Ctx) error {
+	user, err := getUserFromReq(r.cfg.FirebaseClient, c)
+	if err != nil {
+		return c.Status(401).JSON(updateUserLikeResponse{
+			Error: err.Error(),
+		})
+	}
+
+	var body updateUserLikeBody
+	if err := c.BodyParser(&body); err != nil {
+		return c.Status(400).JSON(updateUserLikeResponse{
+			Error: err.Error(),
+		})
+	}
+	if body.Action == "like" {
+		r.cfg.DB.Where("user_id = ? AND listing_id = ?", user.UID, body.ListingID).FirstOrCreate(&database.Like{
+			UserID:    user.UID,
+			ListingID: body.ListingID,
+			CreatedAt: time.Now(),
+		})
+	} else if body.Action == "unlike" {
+		r.cfg.DB.Where("user_id = ? AND listing_id = ?", user.UID, body.ListingID).Delete(&database.Like{})
+	}
+	return c.JSON(updateUserLikeResponse{})
+
+	// var like database.Like
+	// if err := c.BodyParser(&like); err != nil {
+	// 	return c.Status(400).JSON(updateUserLikeResponse{
+	// 		Error: err.Error(),
+	// 	})
+	// }
+	// like.UserID = user.UID
 }
 
 type verifyTokenResponse struct {

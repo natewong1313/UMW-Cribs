@@ -210,6 +210,7 @@ function UserOnlyDetails({ user }: Props) {
     .split(" ")
     .map((name) => name[0])
     .join("")
+    .toUpperCase()
   return (
     <div className="flex items-center space-x-4">
       <a
@@ -221,7 +222,7 @@ function UserOnlyDetails({ user }: Props) {
       </a>
       <Menu as="div" className="relative inline-block text-left">
         <div>
-          <Menu.Button className="flex items-center rounded-full bg-gray-500 p-2 font-medium text-white transition-colors duration-150 hover:bg-gray-400 focus:outline-none">
+          <Menu.Button className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-500 font-medium text-white transition-colors duration-150 hover:bg-gray-400 focus:outline-none">
             {initials}
           </Menu.Button>
         </div>

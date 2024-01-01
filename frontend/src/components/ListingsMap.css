@@ -1,0 +1,9 @@
+.leaflet-pane,
+.leaflet-top,
+.leaflet-bottom {
+    z-index: 0 !important;
+}
+
+.hovered-listing-marker {
+    z-index: 1000 !important;
+}

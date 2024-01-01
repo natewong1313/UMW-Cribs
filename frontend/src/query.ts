@@ -20,8 +20,15 @@ export const getUserQuery = {
   retry: 5,
 }
 
-export const getListingsQuery = {
-  queryKey: "getListings",
-  queryFn: () => fetch("/api/listings").then((res) => res.json()),
+export const getListingsQuery = (searchParams: URLSearchParams) => ({
+  queryKey: ["getListings", searchParams.toString()],
+  queryFn: () =>
+    fetch(`/api/listings?${searchParams.toString()}`).then((res) => res.json()),
+  retry: 5,
+})
+
+export const getUserLikesQuery = {
+  queryKey: "getLikes",
+  queryFn: () => fetch("/api/user/likes").then((res) => res.json()),
   retry: 5,
 }

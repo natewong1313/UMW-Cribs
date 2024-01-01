@@ -1,11 +1,11 @@
 package database
 
 import (
-	"gorm.io/gorm/logger"
 	"os"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 func Connect() (*gorm.DB, error) {
@@ -15,7 +15,7 @@ func Connect() (*gorm.DB, error) {
 	if err != nil {
 		return nil, err
 	}
-	if err = db.AutoMigrate(&Listing{}, &Address{}, &Image{}, &Source{}); err != nil {
+	if err = db.AutoMigrate(&Listing{}, &Address{}, &Image{}, &Source{}, &Like{}); err != nil {
 		return nil, err
 	}
 	return db, nil
