@@ -37,9 +37,11 @@ func Start() {
 
 	weichertListings := ScrapeWeichert()
 	for _, listing := range weichertListings {
-		if listing.ID == "1115-winchester-street-a" {
-			continue
-		}
+		scrapedListings[listing.ID] = listing
+	}
+
+	aptsDotComListings := ScrapeApartmentsDotCom()
+	for _, listing := range aptsDotComListings {
 		scrapedListings[listing.ID] = listing
 	}
 

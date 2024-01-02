@@ -1,7 +1,6 @@
 package scrapers
 
 import (
-	"bytes"
 	"fmt"
 	"io"
 	"net/http"
@@ -38,9 +37,9 @@ func ScrapeWeichert() map[string]*database.Listing {
 
 func (ws *weichertScraper) findAllListings(currentPage int) {
 	ws.logger.Info().Msgf("Scraping Weichert page %d", currentPage)
-	reqBody := []byte(fmt.Sprintf(`{"redirectRequired":false,"currentSearch":"pg=%d&stypeid=3&zip=22401","location":{"id":"22401","searchType":"zip"},"form":null}`, currentPage))
+	reqBody := strings.NewReader(fmt.Sprintf(`{"redirectRequired":false,"currentSearch":"pg=%d&stypeid=3&zip=22401","location":{"id":"22401","searchType":"zip"},"form":null}`, currentPage))
 
-	req, err := http.NewRequest("POST", "https://www.weichert.com/api/search", bytes.NewBuffer(reqBody))
+	req, err := http.NewRequest("POST", "https://www.weichert.com/api/search", reqBody)
 	if err != nil {
 		ws.logger.Err(err).Msg("Failed to create listings data request")
 		return
