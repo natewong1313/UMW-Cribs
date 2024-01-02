@@ -4,7 +4,6 @@ import { GetUserLikesResponse, ListingsResponse } from "../types/types"
 import { getListingsQuery, getUserLikesQuery, queryClient } from "../query"
 import { Link } from "react-router-dom"
 import cn from "../utils/cn"
-import { IconX } from "@tabler/icons-react"
 import { useMemo, useState } from "react"
 
 export default function SavedListingsPage() {
@@ -116,7 +115,7 @@ export default function SavedListingsPage() {
                               </span>
                             </div>
                           </td>
-                          <td className="relative py-2 text-sm font-medium">
+                          <td className="relative px-2 py-2 text-sm font-medium">
                             <button
                               onClick={() => onDeleteBtnClick(listing.id)}
                               className="text-red-500 hover:text-red-900"

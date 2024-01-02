@@ -78,6 +78,9 @@ func (ws *weichertScraper) parseListings(body []byte) error {
 	_, err := jsonparser.ArrayEach(body, func(listingData []byte, dataType jsonparser.ValueType, offset int, err error) {
 		description, _ := jsonparser.GetString(listingData, "description")
 		price, _ := jsonparser.GetFloat(listingData, "price")
+		if price > 3000 {
+			return
+		}
 		bedsStr, _ := jsonparser.GetString(listingData, "beds")
 		beds, _ := strconv.Atoi(strings.Split(bedsStr, " ")[0])
 		bathsStr, _ := jsonparser.GetString(listingData, "bathsshort")

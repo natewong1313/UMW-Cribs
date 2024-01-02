@@ -43,7 +43,7 @@ export default function Select({
           <div className={cn("relative", label && "mt-2")}>
             <Listbox.Button
               className={cn(
-                "relative w-full cursor-pointer rounded-md bg-white py-1.5 pl-3 pr-10 text-left font-medium ring-1 ring-inset ring-gray-300 hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-blue-200 sm:text-sm sm:leading-6",
+                "relative w-full cursor-pointer rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-sm font-medium ring-1 ring-inset ring-gray-300 hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-blue-200 sm:text-sm sm:leading-6 md:text-base",
                 value ? "text-gray-900" : "text-gray-500",
                 className
               )}
@@ -85,7 +85,7 @@ export default function Select({
                         <span
                           className={cn(
                             selected ? "font-semibold" : "font-normal",
-                            "block truncate"
+                            "block truncate text-sm md:text-base"
                           )}
                         >
                           {opt.label}

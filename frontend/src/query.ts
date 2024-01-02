@@ -24,7 +24,9 @@ export const getListingsQuery = (
   searchParams: URLSearchParams | null,
   showOnlyAvailable: boolean
 ) => {
-  const params = searchParams ? searchParams : new URLSearchParams()
+  const params = searchParams
+    ? new URLSearchParams(searchParams)
+    : new URLSearchParams()
   if (showOnlyAvailable) {
     params.append("available", "true")
   }

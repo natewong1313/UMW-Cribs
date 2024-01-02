@@ -6,7 +6,6 @@ import {
   IconX,
 } from "@tabler/icons-react"
 import { Fragment, useEffect, useRef, useState } from "react"
-// import type { Listing } from "../types/listings"
 import cn from "../utils/cn"
 import AuthModal from "./AuthModal"
 import LogoImg from "../assets/logo.png"
@@ -253,7 +252,7 @@ function UserOnlyDetails({ user }: Props) {
         >
           <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
             <div className="py-1">
-              <Menu.Item>
+              {/* <Menu.Item>
                 {({ active }) => (
                   <a
                     href="#"
@@ -291,23 +290,34 @@ function UserOnlyDetails({ user }: Props) {
                     License
                   </a>
                 )}
+              </Menu.Item> */}
+              <Menu.Item>
+                {({ active }) => (
+                  <a
+                    href="#"
+                    className={cn(
+                      active ? "bg-gray-100 text-gray-900" : "text-gray-700",
+                      "block px-4 py-2 text-sm"
+                    )}
+                  >
+                    Account settings
+                  </a>
+                )}
               </Menu.Item>
-              <form method="POST" action="#">
-                <Menu.Item>
-                  {({ active }) => (
-                    <button
-                      type="button"
-                      onClick={onSignOutBtnClick}
-                      className={cn(
-                        active ? "bg-gray-100 text-gray-900" : "text-gray-700",
-                        "block w-full px-4 py-2 text-left text-sm"
-                      )}
-                    >
-                      Sign out
-                    </button>
-                  )}
-                </Menu.Item>
-              </form>
+              <Menu.Item>
+                {({ active }) => (
+                  <button
+                    type="button"
+                    onClick={onSignOutBtnClick}
+                    className={cn(
+                      active ? "bg-gray-100 text-gray-900" : "text-gray-700",
+                      "block w-full px-4 py-2 text-left text-sm"
+                    )}
+                  >
+                    Sign out
+                  </button>
+                )}
+              </Menu.Item>
             </div>
           </Menu.Items>
         </Transition>

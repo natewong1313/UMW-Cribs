@@ -16,7 +16,7 @@ export default function ListingsMap({ listings }: Props) {
   const $hoveredListingId = useStore(hoveredListingId)
 
   return (
-    <div className="flex flex-1">
+    <div className=" hidden flex-1 md:flex">
       <MapContainer
         center={[38.303779245076335, -77.46786117553712]}
         zoom={14}

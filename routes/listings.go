@@ -20,7 +20,7 @@ type listingsResponse struct {
 var distances = map[string]float64{
 	"walking": 0.5,
 	"biking":  1,
-	"driving": 5,
+	"driving": 100,
 }
 
 // GetListings

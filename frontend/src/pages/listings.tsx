@@ -21,10 +21,7 @@ export default function HomePage() {
     useQuery<ListingsResponse>(getListingsQuery(searchParams, true))
   const { isLoading: likesQueryLoading, data: likesData } =
     useQuery<GetUserLikesResponse>(getUserLikesQuery)
-  // let likesSet = new Set<string>()
-  // if (!likesQueryLoading && likesData?.likes) {
-  //   likesSet = new Set(likesData.likes.map((like) => like.listingId))
-  // }
+
   const likesSet = useMemo(() => {
     if (!likesQueryLoading && likesData?.likes) {
       return new Set(likesData.likes.map((like) => like.listingId))
@@ -38,11 +35,11 @@ export default function HomePage() {
       value: "walking",
     },
     {
-      label: "Biking (2 mi.)",
+      label: "Biking (1 mi.)",
       value: "biking",
     },
     {
-      label: "Driving (5 mi.)",
+      label: "Driving (1+ mi.)",
       value: "driving",
     },
   ]
@@ -86,7 +83,7 @@ export default function HomePage() {
     <div>
       <Navbar />
       <div className="border-b border-gray-200 bg-gray-100 px-4 py-2">
-        <div className="flex items-center justify-between">
+        <div className="grid items-center justify-between md:flex">
           <div className="flex space-x-2">
             <PriceDropdown
               minPrice={parseInt(searchParams.get("minPrice") || "")}
@@ -98,7 +95,7 @@ export default function HomePage() {
               minBaths={parseFloat(searchParams.get("minBaths") || "")}
               maxBaths={parseFloat(searchParams.get("maxBaths") || "")}
             />
-            <div className="w-40">
+            <div className="w-36 md:w-40">
               <Select
                 value={searchParams.get("distance") || undefined}
                 options={distanceOptions}
@@ -112,21 +109,21 @@ export default function HomePage() {
               />
             </div>
           </div>
-          <div className="flex items-center text-sm">
+          <div className="mt-2 flex items-center text-sm md:mt-0">
             Sort by:
             <Select
               value={searchParams.get("sort") || ""}
               options={sortOptions}
               onChange={onSortChange}
               placeholder={sortOptions[0].label}
-              className="ml-2 bg-transparent font-medium text-black ring-transparent focus:outline-none focus:ring-0"
+              className="bg-transparent text-sm font-medium text-black ring-transparent focus:outline-none focus:ring-0 md:ml-2 md:text-base"
             />
           </div>
         </div>
       </div>
       <div className="flex">
         <div
-          className="min-w-[480px] overflow-auto p-4 xl:max-w-[810px]"
+          className="overflow-auto p-4 md:min-w-[440px] xl:max-w-[810px]"
           style={{ height: "calc(100vh - 148px)" }}
         >
           <div className="grid grid-cols-2 gap-3 xl:grid-cols-3">
@@ -502,7 +499,7 @@ function FilterPopoverButton({
   return (
     <Popover.Button
       className={cn(
-        "relative w-full cursor-pointer rounded-md bg-white py-1.5 pl-3 pr-8 text-left ring-1 ring-inset hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-blue-200 sm:text-sm sm:leading-6",
+        "relative w-full cursor-pointer rounded-md bg-white py-1.5 pl-3 pr-8 text-left text-sm ring-1 ring-inset hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-blue-200 sm:text-sm sm:leading-6 md:text-base",
         enabled
           ? "bg-blue-100 font-semibold text-blue-500 ring-blue-300"
           : "font-medium text-gray-500 ring-gray-300"
