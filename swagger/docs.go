@@ -33,6 +33,33 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/listings/listing": {
+            "get": {
+                "description": "get a listing by id",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get a listing",
+                "operationId": "get-listing",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Listing ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ListingResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/api/user": {
             "get": {
                 "description": "get user",
@@ -131,6 +158,21 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/database.Like"
                     }
+                }
+            }
+        },
+        "ListingResponse": {
+            "type": "object",
+            "required": [
+                "error",
+                "listing"
+            ],
+            "properties": {
+                "error": {
+                    "type": "string"
+                },
+                "listing": {
+                    "$ref": "#/definitions/database.Listing"
                 }
             }
         },

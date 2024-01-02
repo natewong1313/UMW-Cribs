@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/gofiber/fiber/v2"
@@ -10,6 +11,7 @@ import (
 
 func (r *router) setupListingsRoutes(routeGroup fiber.Router) {
 	routeGroup.Get("/", r.getListings)
+	routeGroup.Get("/listing", r.getListing)
 	routeGroup.Get("/search", r.searchListings)
 }
 
@@ -70,6 +72,33 @@ func (r *router) getListings(c *fiber.Ctx) error {
 	}
 	return c.JSON(listingsResponse{
 		Listings: listings,
+	})
+}
+
+type listingResponse struct {
+	Listing *database.Listing `json:"listing"`
+	Error   string            `json:"error"`
+} //@name ListingResponse
+
+// GetListing
+//
+//	@Summary		Get a listing
+//	@Description	get a listing by id
+//	@ID				get-listing
+//	@Produce		json
+//	@Param			id	query	int	true	"Listing ID"
+//	@Success		200		{object}	listingResponse
+//	@Router			/api/listings/listing [get]
+func (r *router) getListing(c *fiber.Ctx) error {
+	var listing database.Listing
+	fmt.Println(c.Query("id"))
+	if err := r.cfg.DB.Preload("Address").Preload("Source").Preload("Images").Where("id = ?", c.Query("id")).First(&listing).Error; err != nil {
+		return c.JSON(listingResponse{
+			Error: err.Error(),
+		})
+	}
+	return c.JSON(listingResponse{
+		Listing: &listing,
 	})
 }
 

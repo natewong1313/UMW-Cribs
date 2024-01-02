@@ -59,37 +59,14 @@ func Start() {
 		}
 	}
 
-	// update any unavailable listings
 	if len(unavailableListingIDs) > 0 {
 		log.Info().Msgf("Marking %d listings as unavailable", len(unavailableListingIDs))
 		cfg.DB.Model(&database.Listing{}).Where("id IN ?", unavailableListingIDs).Update("available", false)
 	}
 
-	// create any new listings
 	if len(newListings) > 0 {
 		log.Info().Msgf("Creating %d new listings", len(newListings))
 		cfg.DB.Create(newListings)
 	}
 
-	// var newListings []*database.Listing
-	// for listingID, listing := range newListings {
-	// 	// check if in old listings
-	// 	// if not, add to new listings
-	// 	if _, ok := newListings[listing.ID]; !ok {
-	// 		newListings = append(newListings, listing)
-	// 	}
-	// }
-
-	// listingsArr := make([]*database.Listing, 0, len(newListings))
-	// for _, listing := range newListings {
-	// 	listingsArr = append(listingsArr, listing)
-	// }
-
-	// cfg.DB.Session(&gorm.Session{FullSaveAssociations: true}).Clauses(clause.OnConflict{
-	// 	Columns:   []clause.Column{{Name: "id"}},
-	// 	DoUpdates: clause.AssignmentColumns([]string{"rent", "available"}),
-	// }).Create(listingsArr)
-	// for _, listing := range listings {
-	// 	db.Create(&listing)
-	// }
 }

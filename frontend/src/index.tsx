@@ -7,6 +7,7 @@ import ListingsPage from "./pages/listings"
 import { queryClient } from "./query"
 import "@fontsource-variable/manrope"
 import SavedListingsPage from "./pages/saved"
+import ListingPage from "./pages/listing"
 
 const router = createBrowserRouter([
   {
@@ -16,6 +17,10 @@ const router = createBrowserRouter([
   {
     path: "/saved",
     element: <SavedListingsPage />,
+  },
+  {
+    path: "/listings/:listingId",
+    element: <ListingPage />,
   },
 ])
 

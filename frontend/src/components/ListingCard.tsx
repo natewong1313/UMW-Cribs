@@ -2,6 +2,7 @@ import { IconBookmark } from "@tabler/icons-react"
 import cn from "../utils/cn"
 import { useState } from "react"
 import { DatabaseListing } from "../types/types"
+import { Link } from "react-router-dom"
 
 type Props = {
   listing: DatabaseListing
@@ -33,15 +34,12 @@ export default function ListingCard({
     })
   }
   return (
-    <a
+    <Link
       className="rounded-lg border border-gray-200 bg-white shadow-sm transition-all hover:shadow-md"
       key={listing.id}
-      href={`/listings/${listing.id}`}
-      target="_blank"
+      to={`/listings/${listing.id}`}
       onMouseOver={onMouseOver}
       onMouseOut={onMouseOut}
-      data-astro-prefetch="tap"
-      rel="noreferrer"
     >
       <img
         alt={listing.address.line1}
@@ -72,7 +70,7 @@ export default function ListingCard({
             {listing.bathrooms} bth{listing.bathrooms > 1 && "s"}
           </span>
           <span className="text-gray-400">•</span>
-          <span>{listing.address.distance.toFixed(2)} miles</span>
+          <span>{listing.address.distance.toFixed(2)} mi.</span>
           {/* {listing.squareFootage > 0 && (
             <>
               <span className="text-gray-400">•</span>
@@ -85,6 +83,6 @@ export default function ListingCard({
           <span className="font-normal text-gray-500">/ month</span>
         </p>
       </div>
-    </a>
+    </Link>
   )
 }

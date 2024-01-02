@@ -1,0 +1,3 @@
+Fix user being able to like when not logged in
+move auth modal out of navbar
+add more css transitions on hover

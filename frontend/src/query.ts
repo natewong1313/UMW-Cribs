@@ -40,6 +40,13 @@ export const getListingsQuery = (
   }
 }
 
+export const getListingQuery = (id: string) => ({
+  queryKey: ["getListing", id],
+  queryFn: () =>
+    fetch(`/api/listings/listing?id=${id}`).then((res) => res.json()),
+  retry: 5,
+})
+
 export const getUserLikesQuery = {
   queryKey: "getLikes",
   queryFn: () => fetch("/api/user/likes").then((res) => res.json()),

@@ -122,10 +122,7 @@ export default function HomePage() {
         </div>
       </div>
       <div className="flex">
-        <div
-          className="h-[calc(100vh-184px)] overflow-auto p-4 md:h-[calc(100vh-148px)] md:min-w-[440px] xl:max-w-[810px]"
-          // style={{ height: "calc(100vh - 148px)" }}
-        >
+        <div className="h-[calc(100vh-184px)] overflow-auto p-4 md:h-[calc(100vh-148px)] md:min-w-[440px] xl:max-w-[810px]">
           <div className="grid grid-cols-2 gap-3 xl:grid-cols-3">
             {listingsQueryLoading &&
               [...Array(6).keys()].map((i) => <ListingCardSkeleton key={i} />)}

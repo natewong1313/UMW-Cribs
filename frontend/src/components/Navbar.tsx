@@ -41,7 +41,7 @@ export default function Navbar() {
           ) : (
             <div className={cn("space-x-2", isLoading && "invisible")}>
               <button
-                className="rounded-full px-6 py-2.5 font-medium hover:text-gray-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+                className="rounded-full px-4 py-2.5 text-sm font-medium hover:text-gray-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 md:px-6 md:text-base"
                 onClick={() => {
                   setAuthModalOpen(true)
                   setAuthModalPage(0)
@@ -50,7 +50,7 @@ export default function Navbar() {
                 Log in
               </button>
               <button
-                className="rounded-full bg-blue-600 px-6 py-2.5 font-medium text-white hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+                className="rounded-full bg-blue-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 md:px-6 md:text-base"
                 onClick={() => {
                   setAuthModalOpen(true)
                   setAuthModalPage(1)
@@ -169,8 +169,8 @@ function SearchBar() {
             searchResults.map((listing) => (
               <Menu.Item key={listing.id}>
                 {({ active }) => (
-                  <a
-                    href={`/listings/${listing.id}`}
+                  <Link
+                    to={`/listings/${listing.id}`}
                     className={cn(
                       active ? "bg-gray-100 text-gray-900" : "text-gray-700",
                       "flex px-4 py-2 text-sm"
@@ -193,7 +193,7 @@ function SearchBar() {
                         ${listing.rent.toLocaleString()}
                       </div>
                     </div>
-                  </a>
+                  </Link>
                 )}
               </Menu.Item>
             ))}

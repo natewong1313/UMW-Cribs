@@ -13,7 +13,7 @@ export default defineConfig({
   html: {
     template: "./src/index.html",
     // title: "UMW Cribs",
-    // favicon: "./src/assets/logo.png",
+    favicon: "./src/assets/logo.png",
   },
   server: {
     proxy: {

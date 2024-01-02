@@ -14,6 +14,11 @@ export interface GetUserLikesResponse {
   likes: DatabaseLike[];
 }
 
+export interface ListingResponse {
+  error: string;
+  listing: DatabaseListing;
+}
+
 export interface ListingsResponse {
   listings: DatabaseListing[];
 }
