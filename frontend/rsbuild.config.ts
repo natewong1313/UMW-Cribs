@@ -6,12 +6,14 @@ export default defineConfig({
   plugins: [pluginReact()],
   tools: {
     postcss(config) {
-      // @ts-ignore
+      // @ts-expect-error weird
       config.postcssOptions?.plugins?.push(tailwindcss)
     },
   },
   html: {
-    title: "UMW Cribs",
+    template: "./src/index.html",
+    // title: "UMW Cribs",
+    // favicon: "./src/assets/logo.png",
   },
   server: {
     proxy: {
