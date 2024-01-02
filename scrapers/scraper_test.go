@@ -1,11 +1,22 @@
 package scrapers
 
 import (
+	"os"
 	"testing"
+
+	"github.com/joho/godotenv"
+	"github.com/natewong1313/web-app-template/server/config"
 )
 
 func TestStart(t *testing.T) {
-	Start()
+	if err := godotenv.Load("../.env"); err != nil && (os.Getenv("APP_ENV") != "production" && !os.IsNotExist(err)) {
+		panic(err)
+	}
+	cfg, err := config.Init()
+	if err != nil {
+		panic(err)
+	}
+	Start(cfg)
 }
 
 // func TestApts2(t *testing.T) {

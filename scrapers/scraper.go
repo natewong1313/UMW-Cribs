@@ -2,12 +2,11 @@ package scrapers
 
 import (
 	"net/http"
-	"os"
 
-	"github.com/joho/godotenv"
 	"github.com/natewong1313/web-app-template/server/config"
 	"github.com/natewong1313/web-app-template/server/database"
 	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 )
 
 type scraper struct {
@@ -16,16 +15,7 @@ type scraper struct {
 	listings map[string]*database.Listing
 }
 
-func Start() {
-	log := zerolog.New(zerolog.ConsoleWriter{Out: os.Stderr}).With().Timestamp().Logger()
-	if err := godotenv.Load("../.env"); err != nil && (os.Getenv("APP_ENV") != "production" && !os.IsNotExist(err)) {
-		log.Fatal().Err(err).Msg("Failed to load .env file")
-	}
-	cfg, err := config.Init()
-	if err != nil {
-		log.Fatal().Err(err).Msg("Failed to init config")
-	}
-
+func Start(cfg *config.Config) {
 	var oldListingsArr []*database.Listing
 	cfg.DB.Find(&oldListingsArr)
 	oldListings := make(map[string]*database.Listing)
