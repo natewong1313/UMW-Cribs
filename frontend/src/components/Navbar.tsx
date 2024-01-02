@@ -173,7 +173,7 @@ function SearchBar() {
                     to={`/listings/${listing.id}`}
                     className={cn(
                       active ? "bg-gray-100 text-gray-900" : "text-gray-700",
-                      "flex px-4 py-2 text-sm"
+                      "flex px-4 py-2 text-sm transition-colors"
                     )}
                   >
                     <img
@@ -226,7 +226,7 @@ function UserOnlyDetails({ user }: Props) {
     <div className="flex items-center space-x-4">
       <Link
         to="/saved"
-        className="flex items-center rounded-[0.4rem] p-2 font-medium text-gray-600 hover:bg-gray-100"
+        className="flex items-center rounded-[0.4rem] p-2 font-medium text-gray-600 transition-colors hover:bg-gray-100"
       >
         <IconBookmarkFilled size={18} className="mr-1.5 text-gray-400" />
         Saved

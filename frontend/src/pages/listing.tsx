@@ -72,12 +72,6 @@ export default function ListingPage() {
   const { isLoading: likesQueryLoading, data: likesData } =
     useQuery<GetUserLikesResponse>(getUserLikesQuery)
 
-  // const likesSet = useMemo(() => {
-  //   if (!likesQueryLoading && likesData?.likes) {
-  //     return new Set(likesData.likes.map((like) => like.listingId))
-  //   }
-  //   return new Set<string>()
-  // }, [likesData, likesQueryLoading])
   const isLiked = useMemo(() => {
     if (!likesQueryLoading && likesData?.likes) {
       return likesData.likes.some((like) => like.listingId === listingId)
@@ -203,7 +197,7 @@ export default function ListingPage() {
                 </span>{" "}
                 bathrooms
               </p>
-              {listing.squareFootage && (
+              {listing.squareFootage ? (
                 <p className="ml-4 border-l border-gray-200 pl-2 text-gray-500 sm:pl-4">
                   <span className="font-semibold text-gray-700">
                     {listing.squareFootage.toLocaleString()}
@@ -211,6 +205,8 @@ export default function ListingPage() {
                   <span className="hidden md:inline">square feet</span>
                   <span className="md:hidden">sqft</span>
                 </p>
+              ) : (
+                <></>
               )}
               <p className="ml-4 border-l border-gray-200 pl-2 text-gray-500 sm:pl-4">
                 <span className="font-semibold text-gray-700">

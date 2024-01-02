@@ -1,8 +1,8 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "This is a sample api",
-        "title": "Web App Template API",
+        "description": "This is the UMW Cribs API",
+        "title": "UMW Cribs API",
         "contact": {},
         "version": "1.0"
     },

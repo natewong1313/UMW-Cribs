@@ -14,9 +14,9 @@ import (
 	_ "github.com/natewong1313/web-app-template/server/swagger"
 )
 
-// @title Web App Template API
+// @title UMW Cribs API
 // @version 1.0
-// @description This is a sample api
+// @description This is the UMW Cribs API
 // @host localhost:3000
 // @BasePath /
 func main() {
@@ -35,8 +35,9 @@ func main() {
 	}
 	app := fiber.New(fiberCFG)
 	app.Use(logger.New())
-	app.Get("/swagger/*", swagger.HandlerDefault)
-
+	if os.Getenv("APP_ENV") != "production" {
+		app.Get("/swagger/*", swagger.HandlerDefault)
+	}
 	routes.Setup(app, cfg)
 
 	if os.Getenv("APP_ENV") == "production" && os.Getenv("PORT") != "" {
