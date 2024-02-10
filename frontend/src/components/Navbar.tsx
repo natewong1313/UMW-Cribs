@@ -176,11 +176,19 @@ function SearchBar() {
                       "flex px-4 py-2 text-sm transition-colors"
                     )}
                   >
-                    <img
+                    {listing.images.length > 0 ? (
+                      <img
                       src={listing.images[0].url}
                       alt={listing.address.line1 + " " + listing.address.line2}
                       className="h-16 w-16"
                     />
+                    ) : (
+                      <div className="h-16 w-16 bg-gray-200 rounded-md">
+                        <div className="flex items-center justify-center h-full text-gray-500">
+                          No Image
+                          </div>
+                          </div>
+                          )}
                     <div className="ml-3">
                       <div className="text-sm font-medium text-gray-900">
                         {listing.address.line1 + " " + listing.address.line2}

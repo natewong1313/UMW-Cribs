@@ -69,11 +69,14 @@ export default function ListingsMap({ listings }: Props) {
             >
               <Popup>
                 <div className="flex flex-col">
-                  <img
+                  {listing.images.length > 0 ?<img
                     src={listing.images[0].url}
                     alt="listing"
                     className="h-32"
-                  />
+                  />:
+                  <div className="h-32 bg-gray-200 flex items-center justify-center text-gray-500">
+                    No Image
+                    </div>}
                   <div className="mt-1 text-base font-semibold">
                     {listing.address.line1}
                   </div>

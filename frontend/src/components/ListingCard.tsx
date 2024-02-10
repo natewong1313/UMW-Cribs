@@ -41,11 +41,15 @@ export default function ListingCard({
       onMouseOver={onMouseOver}
       onMouseOut={onMouseOut}
     >
-      <img
+      {listing.images.length > 0 ? <img
         alt={listing.address.line1}
         src={listing.images[0].url}
         className="h-48 w-full rounded-t-lg object-cover"
-      />
+      /> : <div className="h-48 w-full bg-gray-200 rounded-t-lg">
+        <div className="flex items-center justify-center h-full text-gray-500">
+          No Image
+        </div>
+        </div>}
       <div className="p-4">
         <div className="flex items-center justify-between">
           <h3 className="text-ld font-semibold">

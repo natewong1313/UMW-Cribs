@@ -88,10 +88,18 @@ export default function SavedListingsPage() {
                               to={`/listings/${listing.id}`}
                               className="flex items-center space-x-2"
                             >
-                              <img
+                              {listing.images.length > 0 ? (
+                                <img
                                 src={listing.images[0].url}
                                 className="h-12 min-w-12 max-w-12 rounded-md"
                               />
+                              ) : (
+                                <div className="h-12 min-w-12 max-w-12 bg-gray-200 rounded-md">
+                                  <div className="flex items-center justify-center h-full text-gray-500">
+                                    No Image
+                                    </div>
+                                    </div>
+                                    )}
                               <span>{listing.address.line1}</span>
                             </Link>
                           </td>
